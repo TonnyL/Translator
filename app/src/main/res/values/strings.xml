@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">简单翻译</string>
+    <string name="action_about">关于</string>
+    <string name="input_hint">请输入要翻译的文字</string>
+    <string name="tips">点击屏幕右下方按钮开始翻译</string>
+    <string name="no_network_connected">当前没有网络连接</string>
+    <string name="no_input">输入为空</string>
+    <string name="setting">设置</string>
+    <string name="title_activity_about">关于</string>
+    <string name="version">版本:1.0.0</string>
+    <string name="thanksto">开发者和致谢名单</string>
+    <string name="thanksto_content">
+        开发者:蒙大牛和伊小利，学生\n简单翻译的开发离不开 聚合数据 和 开源项目：Material Dialogs 的支持！
+    </string>
+    <string name="got_it">知道了</string>
+    <string name="feedback">反馈和建议</string>
+    <string name="topic">简单翻译使用反馈</string>
+    <string name="phone_modle">手机型号:</string>
+    <string name="sdk_version">SDK版本:</string>
+    <string name="choose_mail">选择邮件类应用</string>
+    <string name="sendto">mailto:marktonymengyi@gmail.com</string>
+
+    <string name="donate">捐赠开发者</string>
+    <string name="donate_content">支付宝账号将会复制到粘贴板，进入支付宝可直接粘贴完成捐赠，感谢您的支持！</string>
+    <string name="donate_title">感谢您的捐赠</string>
+    <string name="donate_account">18627441225</string>
+    <string name="OK">确定</string>
+    <string name="cancle">取消</string>
+
+    <string name="score">为此应用评分</string>
+
+    <string name="error_no_results">查询无结果</string>
+    <string name="error_only_en_cn">仅支持中英文互译</string>
+    <string name="error_too_long">字符长度不能超过200个字符</string>
+    <string name="error_cant_analyze">输入的文本无法解析（数据源网络异常）</string>
+    <string name="error_wrong_args">URI参数word错误或者为空</string>
+    <string name="error_net_no_result">网络异常无结果</string>
+
+</resources>

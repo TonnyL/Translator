@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Translator</string>
+    <string name="action_about">About</string>
+    <string name="input_hint">Please input what you want to translate here.</string>
+    <string name="tips">Tap the floating action button to translate.</string>
+    <string name="no_network_connected">No network connected</string>
+    <string name="setting"></string>
+    <string name="no_input">No input</string>
+    <string name="title_activity_about">About</string>
+    <string name="version">Version:1.0.0</string>
+
+    <string name="thanksto">Credits</string>
+    <string name="thanksto_content">
+        Developer:Tony,student\nThanks to Juhe.cn and open source project：Material Dialogs!
+    </string>
+    <string name="got_it">Got it</string>
+
+    <string name="feedback">Feedback and advice</string>
+    <string name="choose_mail">Choose mail apps</string>
+    <string name="topic">Translator feedback and advice</string>
+    <string name="phone_modle">Phone model:</string>
+    <string name="sdk_version">SDK version:</string>
+    <string name="sendto">mailto:marktonymengyi@gmail.com</string>
+
+    <string name="donate">Donate us</string>
+    <string name="donate_title">Donate</string>
+    <string name="donate_account">18627441225</string>
+    <string name="donate_content">
+        Alipay account will be copied to clipboard.Launch Alipay and paste it to finish donating.Thank you!
+    </string>
+    <string name="OK">YES</string>
+    <string name="cancle">CANCLE</string>
+
+    <string name="score">Rate this app in Store</string>
+
+    <string name="error_no_results">No results</string>
+    <string name="error_only_en_cn">Only support English and Chinese</string>
+    <string name="error_too_long">No more than 200 charactors</string>
+    <string name="error_cant_analyze">Unable to analyze the input</string>
+    <string name="error_wrong_args">Invalid arguments</string>
+    <string name="error_net_no_result">Network Exception</string>
+
+</resources>
