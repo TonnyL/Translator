@@ -214,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //强制显示overflow菜单
     private void forceShowOverflowMenu(){
         ViewConfiguration config = ViewConfiguration.get(this);
         try {
