@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:id="@+id/tv_show_result"
+        android:textIsSelectable="true"
         android:text="@string/tips" />
 
 
