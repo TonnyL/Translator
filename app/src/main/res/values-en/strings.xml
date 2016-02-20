@@ -5,7 +5,7 @@
     <string name="input_hint">Please input what you want to translate here.</string>
     <string name="tips">Tap the floating action button to translate.</string>
     <string name="no_network_connected">No network connected</string>
-    <string name="setting"></string>
+    <string name="setting">Settings</string>
     <string name="no_input">No input</string>
     <string name="title_activity_about">About</string>
     <string name="version">Version:1.0.0</string>
