@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.content.ClipData;
@@ -51,13 +52,19 @@ public class AboutActivity extends AppCompatActivity {
         tvFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse(getString(R.string.sendto));
-                Intent intent = new Intent(Intent.ACTION_SENDTO,uri);
-                intent.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.topic));
-                intent.putExtra(Intent.EXTRA_TEXT,
-                        getString(R.string.phone_modle) + Build.MODEL
-                        + "\n" + getString(R.string.sdk_version) + Build.VERSION.RELEASE + "\n");
-                startActivity(intent);
+
+                try{
+                    Uri uri = Uri.parse(getString(R.string.sendto));
+                    Intent intent = new Intent(Intent.ACTION_SENDTO,uri);
+                    intent.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.topic));
+                    intent.putExtra(Intent.EXTRA_TEXT,
+                            getString(R.string.phone_modle) + Build.MODEL
+                                    + "\n" + getString(R.string.sdk_version) + Build.VERSION.RELEASE + "\n");
+                    startActivity(intent);
+                }catch (android.content.ActivityNotFoundException ex){
+                    Snackbar.make(tvFeedback, R.string.no_mail_app,Snackbar.LENGTH_SHORT).show();
+                }
+
             }
         });
 

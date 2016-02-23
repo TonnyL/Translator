@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#009688</color>
     <color name="colorAccent">#009688</color>
     <color name="navigation_bar_base">#009688</color>
+    <color name="statusBarColor_base">#00796b</color>
 </resources>

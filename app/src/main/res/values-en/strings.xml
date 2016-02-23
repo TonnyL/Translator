@@ -8,7 +8,7 @@
     <string name="setting">Settings</string>
     <string name="no_input">No input</string>
     <string name="title_activity_about">About</string>
-    <string name="version">Version:1.0.1(162222)</string>
+    <string name="version">Version:1.0.1(160223)</string>
 
     <string name="thanksto">Credits</string>
     <string name="thanksto_content">
@@ -40,5 +40,7 @@
     <string name="error_cant_analyze">Unable to analyze the input</string>
     <string name="error_wrong_args">Invalid arguments</string>
     <string name="error_net_no_result">Network Exception</string>
+
+    <string name="no_mail_app">No mail app found</string>
 
 </resources>

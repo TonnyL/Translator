@@ -7,7 +7,7 @@
     <string name="no_input">输入为空</string>
     <string name="setting">设置</string>
     <string name="title_activity_about">关于</string>
-    <string name="version">版本:1.0.1(162222)</string>
+    <string name="version">版本:1.0.1(160223)</string>
     <string name="thanksto">开发者和致谢名单</string>
     <string name="thanksto_content">
         开发者:蒙大牛和伊小利，学生\n简单翻译的开发离不开 聚合数据 和 开源项目：Material Dialogs 的支持！
@@ -35,5 +35,7 @@
     <string name="error_cant_analyze">输入的文本无法解析（数据源网络异常）</string>
     <string name="error_wrong_args">URI参数word错误或者为空</string>
     <string name="error_net_no_result">网络异常无结果</string>
+
+    <string name="no_mail_app">没有安装邮件类应用</string>
 
 </resources>
