@@ -8,11 +8,11 @@
     <string name="setting">Settings</string>
     <string name="no_input">No input</string>
     <string name="title_activity_about">About</string>
-    <string name="version">Version:1.0.1(160223)</string>
+    <string name="version">Version:1.0.2(160225)</string>
 
     <string name="thanksto">Credits</string>
     <string name="thanksto_content">
-        Developer:Tony,student\nThanks to Juhe.cn and open source project：Material Dialogs!
+        Developer:Tony,student\nThanks to Juhe.cn,open source project：Material Dialogs,Volley,Google Support Design Library!
     </string>
     <string name="got_it">Got it</string>
 
@@ -32,11 +32,11 @@
     <string name="OK">YES</string>
     <string name="cancle">CANCLE</string>
 
-    <string name="score">Rate this app in Store</string>
+    <string name="score">Rate this app in Google Play</string>
 
     <string name="error_no_results">No results</string>
     <string name="error_only_en_cn">Only support English and Chinese</string>
-    <string name="error_too_long">No more than 200 charactors</string>
+    <string name="error_too_long">No more than 200 characters</string>
     <string name="error_cant_analyze">Unable to analyze the input</string>
     <string name="error_wrong_args">Invalid arguments</string>
     <string name="error_net_no_result">Network Exception</string>

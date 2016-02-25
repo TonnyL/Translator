@@ -7,10 +7,10 @@
     <string name="no_input">输入为空</string>
     <string name="setting">设置</string>
     <string name="title_activity_about">关于</string>
-    <string name="version">版本:1.0.1(160223)</string>
+    <string name="version">版本:1.0.2(160225)</string>
     <string name="thanksto">开发者和致谢名单</string>
     <string name="thanksto_content">
-        开发者:蒙大牛和伊小利，学生\n简单翻译的开发离不开 聚合数据 和 开源项目：Material Dialogs 的支持！
+        开发者:黎赵太郎\n简单翻译的开发离不开 聚合数据、开源项目：Material Dialogs、Volley、Google Support Design Library的支持！
     </string>
     <string name="got_it">知道了</string>
     <string name="feedback">反馈和建议</string>
@@ -27,7 +27,7 @@
     <string name="OK">确定</string>
     <string name="cancle">取消</string>
 
-    <string name="score">为此应用评分</string>
+    <string name="score">在Google Play商店中为此应用评分</string>
 
     <string name="error_no_results">查询无结果</string>
     <string name="error_only_en_cn">仅支持中英文互译</string>
