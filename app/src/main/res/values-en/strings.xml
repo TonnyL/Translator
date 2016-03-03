@@ -43,4 +43,6 @@
 
     <string name="no_mail_app">No mail app found</string>
 
+    <string name="share_results">Share translation results</string>
+
 </resources>

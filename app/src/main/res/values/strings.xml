@@ -38,4 +38,6 @@
 
     <string name="no_mail_app">没有安装邮件类应用</string>
 
+    <string name="share_results">分享翻译结果</string>
+
 </resources>
