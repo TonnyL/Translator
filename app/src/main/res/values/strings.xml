@@ -7,7 +7,7 @@
     <string name="no_input">输入为空</string>
     <string name="setting">设置</string>
     <string name="title_activity_about">关于</string>
-    <string name="version">版本:1.0.2(160225)</string>
+    <string name="version">版本:1.1.0(160304)</string>
     <string name="thanksto">开发者和致谢名单</string>
     <string name="thanksto_content">
         开发者:黎赵太郎\n简单翻译的开发离不开 聚合数据、开源项目：Material Dialogs、Volley、Google Support Design Library的支持！
@@ -39,5 +39,11 @@
     <string name="no_mail_app">没有安装邮件类应用</string>
 
     <string name="share_results">分享翻译结果</string>
+    <string name="no_result_to_share">没有可以分享的结果</string>
+    <string name="choose_app_to_share">请选择要分享的应用</string>
+    <string name="share_text_part1">原文:</string>
+    <string name="share_text_part2">译文:</string>
+    <string name="share_text_part3">\n分享自 @简单翻译(https://play.google.com/store/apps/details?id=com.marktony.translator)</string>
+    <string name="basic_translation">基本含义:</string>
 
 </resources>

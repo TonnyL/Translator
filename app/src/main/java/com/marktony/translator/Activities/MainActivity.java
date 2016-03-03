@@ -9,7 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,23 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText etInput;
     private TextView tvResult;
 
+    private String input = null;
+    private String result = null;
+
     private RequestQueue queue;
-
-    private static final int SUCCESS = 1;
-
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == SUCCESS){
-                String tmp = "";
-                for (int i=0;!msg.getData().isEmpty();i++){
-                    tmp = msg.getData().getString("translation"+i) + "\n";
-                    msg.getData().remove("translation"+i);
-                }
-                tvResult.setText(tmp);
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,19 +76,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (!NetworkUtil.isNetworkConnected(MainActivity.this)){
-                    Snackbar.make(fab,R.string.no_network_connected,Snackbar.LENGTH_LONG)
+                if (!NetworkUtil.isNetworkConnected(MainActivity.this)) {
+                    Snackbar.make(fab, R.string.no_network_connected, Snackbar.LENGTH_LONG)
                             .setAction(R.string.setting, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     startActivity(new Intent(Settings.ACTION_SETTINGS));
                                 }
                             }).show();
-                } else if (etInput.getText() == null || etInput.getText().length() == 0){
-                    Snackbar.make(fab,getString(R.string.no_input),Snackbar.LENGTH_SHORT).show();
+                } else if (etInput.getText() == null || etInput.getText().length() == 0) {
+                    Snackbar.make(fab, getString(R.string.no_input), Snackbar.LENGTH_SHORT).show();
                 } else {
 
-                    sendReq();
+                    sendReq(inputFormat(String.valueOf(etInput.getText())));
 
                 }
             }
@@ -129,7 +116,23 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this,AboutActivity.class);
             startActivity(intent);
             return true;
+
         } else if (id == R.id.action_share){
+            if (result != null){
+                Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
+
+                //组合要分享的内容文本
+                String shareText = getString(R.string.share_text_part1)
+                        + input + "\n"
+                        + getString(R.string.share_text_part2)
+                        + result
+                        + getString(R.string.share_text_part3);
+
+                shareIntent.putExtra(Intent.EXTRA_TEXT,shareText);
+                startActivity(Intent.createChooser(shareIntent,getString(R.string.choose_app_to_share)));
+            } else {
+                Snackbar.make(fab, R.string.no_result_to_share,Snackbar.LENGTH_SHORT).show();
+            }
 
         }
 
@@ -149,10 +152,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void sendReq(){
+    private void sendReq(String in){
+
+        //将传入的in的值赋值给input,这样在share的时候才会有相应的文本
+        input = in;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                Constants.JUHE_INTERFACE + "?key=" + Constants.JUHE_APPKEY + "&word=" + UTF8Encoder.encode(String.valueOf(etInput.getText())),
+                Constants.JUHE_INTERFACE + "?key=" + Constants.JUHE_APPKEY + "&word=" + UTF8Encoder.encode(in),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
@@ -161,16 +167,22 @@ public class MainActivity extends AppCompatActivity {
                             switch (jsonObject.getInt("error_code")){
 
                                 case 0:
-                                    JSONArray transObj = jsonObject.getJSONObject("result").getJSONObject("data").getJSONArray("translation");
+                                    JSONArray dataArray = jsonObject.getJSONObject("result").getJSONObject("data").getJSONArray("translation");
 
-                                    Bundle bundle = new Bundle();
-                                    for (int i=0;i<transObj.length();i++){
-                                        bundle.putString("translation"+i,transObj.getString(i));
+                                    if (jsonObject.getJSONObject("result").getJSONObject("data").isNull("basic")){
+                                        result = dataArray.getString(0);
+                                    } else {
+
+                                        JSONObject basicObj = jsonObject.getJSONObject("result").getJSONObject("data").getJSONObject("basic");
+                                        JSONArray basicArray = basicObj.getJSONArray("explains");
+                                        String basic = getString(R.string.basic_translation);
+                                        for (int i = 0;i < basicArray.length();i++){
+                                            basic = basic + "\n[" + i + "]" + basicArray.getString(i);
+                                        }
+                                        result = dataArray.getString(0) + "\n" + basic;
                                     }
-                                    Message msg = Message.obtain();
-                                    msg.what = SUCCESS;
-                                    msg.setData(bundle);
-                                    handler.sendMessage(msg);
+
+                                    tvResult.setText(result);
                                     break;
                                 case 211101:
                                     Snackbar.make(fab, R.string.error_cant_analyze,Snackbar.LENGTH_SHORT).show();
@@ -209,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 HashMap<String,String> headers = new HashMap<String, String>();
                 headers.put("Accept","application/json");
-                headers.put("Content-Type","appliction/json,charset=UTF-8");
+                headers.put("Content-Type","application/json,charset=UTF-8");
                 return headers;
             }
         };
@@ -234,5 +246,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-}
+    //去掉输入文本中的回车符号
+    private String inputFormat(String in){
+        in = in.replace("\n","");
+        return in;
+    }
 
+}

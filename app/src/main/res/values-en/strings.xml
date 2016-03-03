@@ -8,7 +8,7 @@
     <string name="setting">Settings</string>
     <string name="no_input">No input</string>
     <string name="title_activity_about">About</string>
-    <string name="version">Version:1.0.2(160225)</string>
+    <string name="version">Version:1.1.0(160304)</string>
 
     <string name="thanksto">Credits</string>
     <string name="thanksto_content">
@@ -44,5 +44,11 @@
     <string name="no_mail_app">No mail app found</string>
 
     <string name="share_results">Share translation results</string>
+    <string name="no_result_to_share">No results to share</string>
+    <string name="choose_app_to_share">Please choose one app</string>
+    <string name="share_text_part1">Source text:</string>
+    <string name="share_text_part2">Translated text:</string>
+    <string name="share_text_part3">\nTranslated from @Translator(https://play.google.com/store/apps/details?id=com.marktony.translator)</string>
+    <string name="basic_translation">basic meanings:</string>
 
 </resources>
