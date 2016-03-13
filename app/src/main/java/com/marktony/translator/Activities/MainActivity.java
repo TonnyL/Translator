@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                                         JSONArray basicArray = basicObj.getJSONArray("explains");
                                         String basic = getString(R.string.basic_translation);
                                         for (int i = 0;i < basicArray.length();i++){
-                                            basic = basic + "\n[" + i + "]" + basicArray.getString(i);
+                                            basic = basic + "\n[" + (i + 1) + "]" + basicArray.getString(i);
                                         }
                                         result = dataArray.getString(0) + "\n" + basic;
                                     }

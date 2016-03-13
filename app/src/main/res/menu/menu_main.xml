@@ -8,7 +8,8 @@
         android:orderInCategory="99"
         android:title="@string/share_results"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/share" />
+        android:icon="@drawable/share"
+        />
 
     <item
         android:id="@+id/action_about"
