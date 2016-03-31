@@ -103,10 +103,14 @@ public class AboutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Uri uri = Uri.parse("market://details?id="+getPackageName());
-                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                try {
+                    Uri uri = Uri.parse("market://details?id="+getPackageName());
+                    Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } catch (android.content.ActivityNotFoundException ex){
+                    Snackbar.make(tvScore, R.string.no_app_store,Snackbar.LENGTH_SHORT).show();
+                }
 
             }
         });

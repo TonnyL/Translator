@@ -8,7 +8,7 @@
     <string name="setting">Settings</string>
     <string name="no_input">No input</string>
     <string name="title_activity_about">About</string>
-    <string name="version">Version:1.1.1(160313)</string>
+    <string name="version">Version:1.2.1(160401)</string>
 
     <string name="thanksto">Credits</string>
     <string name="thanksto_content">
@@ -50,5 +50,6 @@
     <string name="share_text_part2">Translated text:</string>
     <string name="share_text_part3">\nTranslated from @Translator(https://play.google.com/store/apps/details?id=com.marktony.translator)</string>
     <string name="basic_translation">basic meanings:</string>
+    <string name="no_app_store">No App store found</string>
 
 </resources>

@@ -7,7 +7,7 @@
     <string name="no_input">输入为空</string>
     <string name="setting">设置</string>
     <string name="title_activity_about">关于</string>
-    <string name="version">版本:1.1.1(160313)</string>
+    <string name="version">version:1.2.1(160401)愚人节快乐</string>
     <string name="thanksto">开发者和致谢名单</string>
     <string name="thanksto_content">
         开发者:黎赵太郎\n 感谢:聚合数据、开源项目：Material Dialogs、Volley、Google Support Design Library的支持！
@@ -45,5 +45,6 @@
     <string name="share_text_part2">译文:</string>
     <string name="share_text_part3">\n分享自 @简单翻译(https://play.google.com/store/apps/details?id=com.marktony.translator)</string>
     <string name="basic_translation">基本含义:</string>
+    <string name="no_app_store">没有找到市场类的App</string>
 
 </resources>

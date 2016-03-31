@@ -8,8 +8,8 @@ android {
         applicationId "com.marktony.translator"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 6
-        versionName "1.1.1(160313)"
+        versionCode 7
+        versionName "1.2.1(160401)"
     }
     buildTypes {
         release {
