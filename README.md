@@ -1,5 +1,5 @@
 # 简单翻译
-简单翻译是一款基于Android平台的翻译类App,所使用的API来自** [聚合数据](https://www.juhe.cn/) **
+简单翻译是一款基于Android平台的翻译类App,所使用的API来自**[聚合数据](https://www.juhe.cn/)**
 
 ## 运行截图
 ![0](https://github.com/marktony/Translator/blob/master/0.png)
