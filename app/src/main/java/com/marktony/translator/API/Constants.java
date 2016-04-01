@@ -5,6 +5,6 @@ package com.marktony.translator.API;
  */
 public class Constants {
 
-    public static final String JUHE_APPKEY = "b386d3f343bef4ab54602f9c4297cdda";
+    public static final String JUHE_APPKEY = "";
     public static final String JUHE_INTERFACE = "http://japi.juhe.cn/youdao/dictionary.from";
 }
