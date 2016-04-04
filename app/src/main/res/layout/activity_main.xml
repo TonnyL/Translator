@@ -37,7 +37,8 @@
                 android:gravity="top"
                 android:hint="@string/input_hint"
                 android:background="@null"
-                android:textCursorDrawable="@android:color/white"/>
+                android:textColor="@android:color/white"
+                android:textCursorDrawable="@android:color/white" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

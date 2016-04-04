@@ -5,6 +5,7 @@ package com.marktony.translator.API;
  */
 public class Constants {
 
-    public static final String JUHE_APPKEY = "";
-    public static final String JUHE_INTERFACE = "http://japi.juhe.cn/youdao/dictionary.from";
+    public static final String YOUDAO_KEY = "1329500205";
+    public static final String YOUDAO_URL = "http://fanyi.youdao.com/openapi.do?keyfrom=marktonytranslator";
+
 }

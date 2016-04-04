@@ -4,22 +4,22 @@
     <string name="action_about">About</string>
     <string name="input_hint">Please input what you want to translate here.</string>
     <string name="tips">Tap the floating action button to translate.</string>
-    <string name="no_network_connected">No network connected</string>
+    <string name="no_network_connected">No network connection</string>
     <string name="setting">Settings</string>
     <string name="no_input">No input</string>
     <string name="title_activity_about">About</string>
-    <string name="version">Version:1.2.1(160401)</string>
+    <string name="version">Version:1.2.2(160404)</string>
 
     <string name="thanksto">Credits</string>
     <string name="thanksto_content">
-        Developer:黎赵太郎\nThanks to Juhe.cn,open source project：Material Dialogs,Volley,Google Support Design Library!
+        Developer:黎赵太郎\nThanks to Youdao,Material Dialogs,Volley,Google Support Design Library!
     </string>
     <string name="got_it">Got it</string>
 
     <string name="feedback">Feedback and advice</string>
     <string name="choose_mail">Choose mail apps</string>
     <string name="topic">Translator feedback and advice</string>
-    <string name="phone_modle">Phone model:</string>
+    <string name="phone_model">Phone model:</string>
     <string name="sdk_version">SDK version:</string>
     <string name="sendto">mailto:marktonymengyi@gmail.com</string>
 
@@ -30,16 +30,15 @@
         Alipay account will be copied to clipboard.Launch Alipay and paste it to finish donating.Thank you!
     </string>
     <string name="OK">YES</string>
-    <string name="cancle">CANCLE</string>
+    <string name="cancel">CANCEL</string>
 
     <string name="score">Rate this app in Google Play</string>
 
-    <string name="error_no_results">No results</string>
-    <string name="error_only_en_cn">Only support English and Chinese</string>
-    <string name="error_too_long">No more than 200 characters</string>
-    <string name="error_cant_analyze">Unable to analyze the input</string>
-    <string name="error_wrong_args">Invalid arguments</string>
-    <string name="error_net_no_result">Network Exception</string>
+    <string name="error_too_long">The input is too long</string>
+    <string name="unable_to_get_valid_result">Unable to get the valid result</string>
+    <string name="unsupported_language_type">Unsupported language type</string>
+    <string name="invalid_key">Invalid key</string>
+    <string name="no_dic_result">No dictionary result</string>
 
     <string name="no_mail_app">No mail app found</string>
 
@@ -49,7 +48,8 @@
     <string name="share_text_part1">Source text:</string>
     <string name="share_text_part2">Translated text:</string>
     <string name="share_text_part3">\nTranslated from @Translator(https://play.google.com/store/apps/details?id=com.marktony.translator)</string>
-    <string name="basic_translation">basic meanings:</string>
     <string name="no_app_store">No App store found</string>
+    <string name="translation">Translation:</string>
+    <string name="basic_meaning">Basic meaning:</string>
 
 </resources>

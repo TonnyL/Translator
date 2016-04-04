@@ -7,15 +7,15 @@
     <string name="no_input">输入为空</string>
     <string name="setting">设置</string>
     <string name="title_activity_about">关于</string>
-    <string name="version">version:1.2.1(160401)愚人节快乐</string>
+    <string name="version">version:1.2.2(160404)</string>
     <string name="thanksto">开发者和致谢名单</string>
     <string name="thanksto_content">
-        开发者:黎赵太郎\n 感谢:聚合数据、开源项目：Material Dialogs、Volley、Google Support Design Library的支持！
+        开发者:黎赵太郎\n 感谢:有道、Material Dialogs、Volley、Google Support Design Library的支持！
     </string>
     <string name="got_it">知道了</string>
     <string name="feedback">反馈和建议</string>
     <string name="topic">简单翻译使用反馈</string>
-    <string name="phone_modle">手机型号:</string>
+    <string name="phone_model">手机型号:</string>
     <string name="sdk_version">SDK版本:</string>
     <string name="choose_mail">选择邮件类应用</string>
     <string name="sendto">mailto:marktonymengyi@gmail.com</string>
@@ -25,16 +25,15 @@
     <string name="donate_title">感谢您的捐赠</string>
     <string name="donate_account">18627441225</string>
     <string name="OK">确定</string>
-    <string name="cancle">取消</string>
+    <string name="cancel">取消</string>
 
     <string name="score">在Google Play商店中为此应用评分</string>
 
-    <string name="error_no_results">查询无结果</string>
-    <string name="error_only_en_cn">仅支持中英文互译</string>
-    <string name="error_too_long">字符长度不能超过200个字符</string>
-    <string name="error_cant_analyze">输入的文本无法解析（数据源网络异常）</string>
-    <string name="error_wrong_args">URI参数word错误或者为空</string>
-    <string name="error_net_no_result">网络异常无结果</string>
+    <string name="error_too_long">要翻译的文本过长</string>
+    <string name="unable_to_get_valid_result">无法进行有效的翻译</string>
+    <string name="unsupported_language_type">不支持的语言类型</string>
+    <string name="invalid_key">无效的key</string>
+    <string name="no_dic_result">无词典结果</string>
 
     <string name="no_mail_app">没有安装邮件类应用</string>
 
@@ -44,7 +43,8 @@
     <string name="share_text_part1">原文:</string>
     <string name="share_text_part2">译文:</string>
     <string name="share_text_part3">\n分享自 @简单翻译(https://play.google.com/store/apps/details?id=com.marktony.translator)</string>
-    <string name="basic_translation">基本含义:</string>
     <string name="no_app_store">没有找到市场类的App</string>
+    <string name="translation">翻译:</string>
+    <string name="basic_meaning">基本释义:</string>
 
 </resources>

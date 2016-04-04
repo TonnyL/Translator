@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewConfiguration;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,11 +26,9 @@ import com.marktony.translator.R;
 import com.marktony.translator.Utils.NetworkUtil;
 import com.marktony.translator.Utils.UTF8Encoder;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,9 +50,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initViews();
-
-        //如果有实体菜单按钮，将其屏蔽，强制显示overflow菜单
-        forceShowOverflowMenu();
 
         queue = Volley.newRequestQueue(getApplicationContext());
 
@@ -153,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
         etInput = (EditText) findViewById(R.id.et_main_input);
         tvResult = (TextView) findViewById(R.id.tv_show_result);
 
-
     }
 
     private void sendReq(String in){
@@ -162,50 +155,53 @@ public class MainActivity extends AppCompatActivity {
         input = in;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                Constants.JUHE_INTERFACE + "?key=" + Constants.JUHE_APPKEY + "&word=" + UTF8Encoder.encode(in),
+                Constants.YOUDAO_URL + "&key=" + Constants.YOUDAO_KEY + "&type=data&doctype=json&version=1.1&q=" + UTF8Encoder.encode(in),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
 
                         try {
-                            switch (jsonObject.getInt("error_code")){
+                            switch (jsonObject.getInt("errorCode")){
 
                                 case 0:
-                                    JSONArray dataArray = jsonObject.getJSONObject("result").getJSONObject("data").getJSONArray("translation");
-
-                                    if (jsonObject.getJSONObject("result").getJSONObject("data").isNull("basic")){
-                                        result = dataArray.getString(0);
-                                    } else {
-
-                                        JSONObject basicObj = jsonObject.getJSONObject("result").getJSONObject("data").getJSONObject("basic");
-                                        JSONArray basicArray = basicObj.getJSONArray("explains");
-                                        String basic = getString(R.string.basic_translation);
-                                        for (int i = 0;i < basicArray.length();i++){
-                                            basic = basic + "\n[" + (i + 1) + "]" + basicArray.getString(i);
+                                    // 有道翻译
+                                    // 需要进行空值判断
+                                    String dic = "";
+                                    if (!jsonObject.isNull("translation")){
+                                        for (int i = 0;i < jsonObject.getJSONArray("translation").length();i++){
+                                            dic = dic + jsonObject.getJSONArray("translation").getString(i) + "\n";
                                         }
-                                        result = dataArray.getString(0) + "\n" + basic;
                                     }
 
+                                    // 有道词典基本释义
+                                    // 需要进行空值判断
+                                    String basic = "";
+                                    if ( !jsonObject.isNull("basic")){
+                                        for (int i = 0;i < jsonObject.getJSONObject("basic").getJSONArray("explains").length();i++){
+                                            basic = basic + jsonObject.getJSONObject("basic").getJSONArray("explains").getString(i) + ";";
+                                        }
+                                    }
+
+                                    result = getString(R.string.translation) + dic + getString(R.string.basic_meaning) + basic;
                                     tvResult.setText(result);
+
                                     break;
-                                case 211101:
-                                    Snackbar.make(fab, R.string.error_cant_analyze,Snackbar.LENGTH_SHORT).show();
-                                    break;
-                                case 211102:
+                                case 20:
                                     Snackbar.make(fab, R.string.error_too_long,Snackbar.LENGTH_SHORT).show();
                                     break;
-                                case 211103:
-                                    Snackbar.make(fab, R.string.error_only_en_cn,Snackbar.LENGTH_SHORT).show();
+                                case 30:
+                                    Snackbar.make(fab, R.string.unable_to_get_valid_result,Snackbar.LENGTH_SHORT).show();
                                     break;
-                                case 211104:
-                                    Snackbar.make(fab, R.string.error_no_results,Snackbar.LENGTH_SHORT).show();
+                                case 40:
+                                    Snackbar.make(fab, R.string.unsupported_language_type,Snackbar.LENGTH_SHORT).show();
                                     break;
-                                case 211105:
-                                    Snackbar.make(fab, R.string.error_wrong_args,Snackbar.LENGTH_SHORT).show();
+                                case 50:
+                                    Snackbar.make(fab, R.string.invalid_key,Snackbar.LENGTH_SHORT).show();
                                     break;
-                                case 211106:
-                                    Snackbar.make(fab, R.string.error_net_no_result,Snackbar.LENGTH_SHORT).show();
+                                case 60:
+                                    Snackbar.make(fab, R.string.no_dic_result,Snackbar.LENGTH_SHORT).show();
                                     break;
+
                                 default:
                                     break;
 
@@ -232,22 +228,6 @@ public class MainActivity extends AppCompatActivity {
 
         queue.add(request);
 
-    }
-
-    //强制显示overflow菜单
-    private void forceShowOverflowMenu(){
-        ViewConfiguration config = ViewConfiguration.get(this);
-        try {
-            Field menuField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-            if (menuField != null){
-                menuField.setAccessible(true);
-                menuField.setBoolean(config,false);
-            }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 
     //去掉输入文本中的回车符号
