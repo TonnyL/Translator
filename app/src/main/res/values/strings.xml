@@ -9,8 +9,7 @@
     <string name="title_activity_about">关于</string>
     <string name="version">version:1.2.3(160504)</string>
     <string name="thanksto">开发者和致谢名单</string>
-    <string name="thanksto_content">开发者:黎赵太郎\n感谢:有道、Material Dialogs、Volley、Google Support Design Library的支持！
-    </string>
+    <string name="thanksto_content">开发者:黎赵太郎\n感谢:有道、Material Dialogs、Volley、Google Support Design Library的支持！</string>
     <string name="got_it">知道了</string>
     <string name="feedback">反馈和建议</string>
     <string name="topic">简单翻译使用反馈</string>
