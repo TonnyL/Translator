@@ -8,12 +8,12 @@
         android:orderInCategory="99"
         android:title="@string/share_results"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/share"
-        />
+        android:icon="@drawable/share" />
 
     <item
         android:id="@+id/action_about"
         android:orderInCategory="100"
         android:title="@string/action_about"
         app:showAsAction="never" />
+
 </menu>

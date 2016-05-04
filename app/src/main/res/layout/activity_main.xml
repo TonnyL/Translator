@@ -38,11 +38,23 @@
                 android:hint="@string/input_hint"
                 android:background="@null"
                 android:textColor="@android:color/white"
-                android:textCursorDrawable="@android:color/white" />
+                android:cursorVisible="true"
+                android:textCursorDrawable="@null" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:id="@+id/tv_clear"
+        android:text="@string/clear"
+        android:textColor="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/app_bar_height" />
 
     <TextView
         android:layout_width="match_parent"
@@ -62,6 +74,8 @@
         android:background="@color/colorPrimary"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
         android:src="@drawable/ok" />
 
 </android.support.design.widget.CoordinatorLayout>

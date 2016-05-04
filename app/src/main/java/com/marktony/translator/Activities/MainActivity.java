@@ -8,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private EditText etInput;
     private TextView tvResult;
+    private TextView tvClear;
 
     private String input = null;
     private String result = null;
@@ -85,10 +88,41 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
+                // 监听输入面板的情况，如果激活则隐藏
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm.isActive()){
                     imm.hideSoftInputFromWindow(fab.getWindowToken(),0);
                 }
+            }
+        });
+
+        etInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (count != 0){
+
+                    tvClear.setVisibility(View.VISIBLE);
+
+                    tvClear.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            etInput.setText("");
+                        }
+                    });
+                } else {
+                    tvClear.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
@@ -146,6 +180,9 @@ public class MainActivity extends AppCompatActivity {
 
         etInput = (EditText) findViewById(R.id.et_main_input);
         tvResult = (TextView) findViewById(R.id.tv_show_result);
+        tvClear = (TextView) findViewById(R.id.tv_clear);
+        // 初始化清除按钮，当没有输入时是不可见的
+        tvClear.setVisibility(View.INVISIBLE);
 
     }
 

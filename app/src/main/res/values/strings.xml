@@ -2,15 +2,14 @@
     <string name="app_name">简单翻译</string>
     <string name="action_about">关于</string>
     <string name="input_hint">请输入要翻译的文字</string>
-    <string name="tips">点击屏幕右方按钮开始翻译</string>
+    <string name="tips">点击屏幕右方按钮开始翻译,长按翻译结果可以复制</string>
     <string name="no_network_connected">当前没有网络连接</string>
     <string name="no_input">输入为空</string>
     <string name="setting">设置</string>
     <string name="title_activity_about">关于</string>
-    <string name="version">version:1.2.2(160404)</string>
+    <string name="version">version:1.2.3(160504)</string>
     <string name="thanksto">开发者和致谢名单</string>
-    <string name="thanksto_content">
-        开发者:黎赵太郎\n 感谢:有道、Material Dialogs、Volley、Google Support Design Library的支持！
+    <string name="thanksto_content">开发者:黎赵太郎\n感谢:有道、Material Dialogs、Volley、Google Support Design Library的支持！
     </string>
     <string name="got_it">知道了</string>
     <string name="feedback">反馈和建议</string>
@@ -46,5 +45,6 @@
     <string name="no_app_store">没有找到市场类的App</string>
     <string name="translation">翻译:</string>
     <string name="basic_meaning">基本释义:</string>
+    <string name="clear">清除已输入内容</string>
 
 </resources>
