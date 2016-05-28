@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.content.ClipboardManager;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -19,10 +20,10 @@ import com.marktony.translator.R;
 public class AboutActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private TextView tvThanks;
-    private TextView tvFeedback;
-    private TextView tvDonate;
-    private TextView tvScore;
+    private LinearLayout layoutRate;
+    private LinearLayout layoutFeedbackAdvice;
+    private LinearLayout layoutDonate;
+    private TextView tvGitHub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,24 +32,7 @@ public class AboutActivity extends AppCompatActivity {
 
         initViews();
 
-        tvThanks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MaterialDialog.Builder dialog = new MaterialDialog.Builder(AboutActivity.this);
-                dialog.title(R.string.thanksto);
-                dialog.content(R.string.thanksto_content);
-                dialog.neutralText(R.string.got_it);
-                dialog.onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
-        });
-
-        tvFeedback.setOnClickListener(new View.OnClickListener() {
+        layoutFeedbackAdvice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -61,13 +45,13 @@ public class AboutActivity extends AppCompatActivity {
                                     + "\n" + getString(R.string.sdk_version) + Build.VERSION.RELEASE + "\n");
                     startActivity(intent);
                 }catch (android.content.ActivityNotFoundException ex){
-                    Snackbar.make(tvFeedback, R.string.no_mail_app,Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(layoutFeedbackAdvice, R.string.no_mail_app,Snackbar.LENGTH_SHORT).show();
                 }
 
             }
         });
 
-        tvDonate.setOnClickListener(new View.OnClickListener() {
+        layoutDonate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MaterialDialog.Builder  dialog = new MaterialDialog.Builder(AboutActivity.this);
@@ -98,7 +82,7 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-        tvScore.setOnClickListener(new View.OnClickListener() {
+        layoutRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -108,9 +92,16 @@ public class AboutActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } catch (android.content.ActivityNotFoundException ex){
-                    Snackbar.make(tvScore, R.string.no_app_store,Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(layoutRate, R.string.no_app_store,Snackbar.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+
+        tvGitHub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getString(R.string.github_url))));
             }
         });
 
@@ -123,10 +114,11 @@ public class AboutActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tvThanks = (TextView) findViewById(R.id.tv_thanks);
-        tvFeedback  = (TextView) findViewById(R.id.tv_feedback);
-        tvDonate = (TextView) findViewById(R.id.tv_donate);
-        tvScore = (TextView) findViewById(R.id.tv_score);
+        layoutRate = (LinearLayout) findViewById(R.id.LL_rate);
+        layoutFeedbackAdvice = (LinearLayout) findViewById(R.id.LL_bugs);
+        layoutDonate = (LinearLayout) findViewById(R.id.LL_support);
+
+        tvGitHub = (TextView) findViewById(R.id.tv_github);
 
     }
 

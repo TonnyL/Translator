@@ -8,15 +8,10 @@
     <string name="setting">Settings</string>
     <string name="no_input">No input</string>
     <string name="title_activity_about">About</string>
-    <string name="version">Version:1.2.3(160504)</string>
+    <string name="version">Version:1.2.4(160528)</string>
 
-    <string name="thanksto">Credits</string>
-    <string name="thanksto_content">
-        Developer:黎赵太郎\nThanks to Youdao,Material Dialogs,Volley,Google Support Design Library!
-    </string>
     <string name="got_it">Got it</string>
 
-    <string name="feedback">Feedback and advice</string>
     <string name="choose_mail">Choose mail apps</string>
     <string name="topic">Translator feedback and advice</string>
     <string name="phone_model">Phone model:</string>
@@ -31,8 +26,6 @@
     </string>
     <string name="OK">YES</string>
     <string name="cancel">CANCEL</string>
-
-    <string name="score">Rate this app in Google Play</string>
 
     <string name="error_too_long">The input is too long</string>
     <string name="unable_to_get_valid_result">Unable to get the valid result</string>
@@ -52,5 +45,18 @@
     <string name="translation">Translation:</string>
     <string name="basic_meaning">Basic meaning:</string>
     <string name="clear">Clear the input</string>
+
+    <string name="rate">Rate</string>
+    <string name="rate_description">If you like the Translator app,please do rate it.</string>
+    <string name="author">Author</string>
+    <string name="author_name">Li Zhaotailang</string>
+    <string name="author_description">Changsha,Hunan,China</string>
+    <string name="follow_on_github">Follow on GitHub</string>
+    <string name="github_url">https://github.com/marktony</string>
+    <string name="support">Support</string>
+    <string name="feedback_advice">Report Bugs / Advice</string>
+    <string name="feedback_advice_description">Help me to improve the Translator app.</string>
+    <string name="coffee">Give me a cup of coffee</string>
+    <string name="coffee_description">If you think I deserve to get paid for my work, you can leave me a little money.</string>
 
 </resources>
