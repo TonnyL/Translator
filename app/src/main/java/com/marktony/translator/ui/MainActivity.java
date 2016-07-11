@@ -1,12 +1,17 @@
 package com.marktony.translator.ui;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +21,7 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -166,6 +172,29 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Snackbar.make(fab, R.string.no_result_to_share,Snackbar.LENGTH_SHORT).show();
             }
+
+        } else if (id == R.id.action_setting){
+
+            NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this)
+                    .setSmallIcon(R.drawable.ic_small_icon)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(result)
+                    .setWhen(System.currentTimeMillis())
+                    .setPriority(Notification.PRIORITY_DEFAULT)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(result));
+
+            PendingIntent intentShare = PendingIntent.getActivity(MainActivity.this,0,new Intent().setAction(Intent.ACTION_SEND),PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent intentCopy = PendingIntent.getActivity(MainActivity.this,1,new Intent().setAction(Intent.ACTION_SEND),PendingIntent.FLAG_CANCEL_CURRENT);
+
+            //intentShare.send(MainActivity.this,1,);
+
+            mBuilder.addAction(R.drawable.ic_copy,"复制",intentCopy)
+                    .addAction(R.drawable.ic_share,"分享",intentShare);
+
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            manager.notify(0,mBuilder.build());
+
 
         }
 

@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_share"
-        android:orderInCategory="99"
+        android:orderInCategory="98"
         android:title="@string/share_results"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_share" />
@@ -14,6 +14,12 @@
         android:id="@+id/action_about"
         android:orderInCategory="100"
         android:title="@string/action_about"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_setting"
+        android:orderInCategory="99"
+        android:title="设置"
         app:showAsAction="never" />
 
 </menu>
