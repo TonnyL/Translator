@@ -1,4 +1,4 @@
-package com.marktony.translator.Utils;
+package com.marktony.translator.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

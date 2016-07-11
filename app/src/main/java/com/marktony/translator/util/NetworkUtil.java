@@ -1,4 +1,4 @@
-package com.marktony.translator.Utils;
+package com.marktony.translator.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

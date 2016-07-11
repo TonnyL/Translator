@@ -1,4 +1,4 @@
-package com.marktony.translator.Activities;
+package com.marktony.translator.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -23,10 +24,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.marktony.translator.API.Constants;
+import com.marktony.translator.api.Constants;
 import com.marktony.translator.R;
-import com.marktony.translator.Utils.NetworkUtil;
-import com.marktony.translator.Utils.UTF8Encoder;
+import com.marktony.translator.util.NetworkUtil;
+import com.marktony.translator.util.UTF8Encoder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,11 +37,11 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
     private FloatingActionButton fab;
     private EditText etInput;
     private TextView tvResult;
     private TextView tvClear;
+    private ProgressBar progressBar;
 
     private String input = null;
     private String result = null;
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -184,9 +185,14 @@ public class MainActivity extends AppCompatActivity {
         // 初始化清除按钮，当没有输入时是不可见的
         tvClear.setVisibility(View.INVISIBLE);
 
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
     }
 
     private void sendReq(String in){
+
+        progressBar.setVisibility(View.VISIBLE);
+        tvResult.setVisibility(View.INVISIBLE);
 
         //将传入的in的值赋值给input,这样在share的时候才会有相应的文本
         input = in;
@@ -247,11 +253,16 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
+                        progressBar.setVisibility(View.GONE);
+                        tvResult.setVisibility(View.VISIBLE);
+
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 Snackbar.make(fab,volleyError.toString(),Snackbar.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                tvResult.setVisibility(View.VISIBLE);
             }
         }){
             @Override

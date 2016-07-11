@@ -5,74 +5,87 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".Activities.MainActivity">
+    tools:context=".ui.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
-        android:layout_height="@dimen/app_bar_height"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
-            app:layout_collapseMode="pin"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            android:fitsSystemWindows="true"
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="?attr/colorPrimary">
+            android:orientation="vertical">
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/input_height"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
                 android:id="@+id/et_main_input"
                 android:gravity="top"
                 android:hint="@string/input_hint"
-                android:background="@null"
+                android:textColorHint="@android:color/white"
+                android:background="@color/colorPrimary"
                 android:textColor="@android:color/white"
                 android:cursorVisible="true"
                 android:textCursorDrawable="@null" />
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:id="@+id/tv_clear"
+                android:text="@string/clear"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginStart="16dp" />
 
-    </android.support.design.widget.AppBarLayout>
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progress_bar"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:id="@+id/tv_clear"
-        android:text="@string/clear"
-        android:textColor="@color/colorPrimary"
-        android:gravity="center_vertical"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/app_bar_height" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="@dimen/result_min_height"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:id="@+id/tv_show_result"
+                android:textIsSelectable="true"
+                android:text="@string/tips" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/tv_result_margin_top"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:id="@+id/tv_show_result"
-        android:textIsSelectable="true"
-        android:text="@string/tips" />
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:layout_anchor="@id/app_bar"
+        app:layout_anchor="@id/et_main_input"
         app:layout_anchorGravity="bottom|end"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"

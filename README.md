@@ -3,8 +3,6 @@
 
 ## 运行截图
 ![0](https://github.com/marktony/Translator/blob/master/screenshoots/0.png)
-![1](https://github.com/marktony/Translator/blob/master/screenshoots/1.png)
-![2](https://github.com/marktony/Translator/blob/master/screenshoots/2.png)
 
 ## 下载使用
 你可以扫描下面的二维码或者是点击后面的链接进行下载
@@ -17,7 +15,6 @@
 * [百度手机助手](http://shouji.baidu.com/software/item?docid=9165471&from=as)
 
 ## 相关项目
-* [Material-Dialogs](https://github.com/afollestad/material-dialogs)
 * [Volley](https://android.googlesource.com/platform/frameworks/volley)
 
 ## 联系我

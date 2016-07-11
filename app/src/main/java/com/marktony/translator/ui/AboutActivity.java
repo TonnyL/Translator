@@ -1,11 +1,13 @@
-package com.marktony.translator.Activities;
+package com.marktony.translator.ui;
 
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.content.ClipboardManager;
@@ -13,8 +15,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.marktony.translator.R;
 
 public class AboutActivity extends AppCompatActivity {
@@ -54,29 +54,25 @@ public class AboutActivity extends AppCompatActivity {
         layoutDonate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MaterialDialog.Builder  dialog = new MaterialDialog.Builder(AboutActivity.this);
-                dialog.title(R.string.donate_title);
-                dialog.content(R.string.donate_content);
-                dialog.positiveText(R.string.OK);
-                dialog.negativeText(R.string.cancel);
-                dialog.onPositive(new MaterialDialog.SingleButtonCallback() {
+
+                AlertDialog dialog = new AlertDialog.Builder(AboutActivity.this).create();
+                dialog.setTitle(R.string.donate_title);
+                dialog.setMessage(getString(R.string.donate_content));
+                dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.OK), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         //将指定账号添加到剪切板
                         ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                         ClipData clipData = ClipData.newPlainText("text", getString(R.string.donate_account));
                         manager.setPrimaryClip(clipData);
-
-                        dialog.dismiss();
                     }
                 });
-                dialog.onNegative(new MaterialDialog.SingleButtonCallback() {
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        dialog.dismiss();
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
                     }
                 });
-
                 dialog.show();
 
             }

@@ -1,4 +1,4 @@
-package com.marktony.translator.API;
+package com.marktony.translator.api;
 
 /**
  * Created by lizhaotailang on 2016/2/18.
