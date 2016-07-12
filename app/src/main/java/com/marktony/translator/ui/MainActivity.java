@@ -3,56 +3,27 @@ package com.marktony.translator.ui;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.RemoteViews;
-import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.marktony.translator.api.Constants;
 import com.marktony.translator.R;
-import com.marktony.translator.util.NetworkUtil;
-import com.marktony.translator.util.UTF8Encoder;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class MainActivity extends AppCompatActivity {
-
-    private FloatingActionButton fab;
-    private EditText etInput;
-    private TextView tvResult;
-    private TextView tvClear;
-    private ProgressBar progressBar;
-
-    private String input = null;
-    private String result = null;
-
-    private RequestQueue queue;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,256 +32,115 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
 
-        queue = Volley.newRequestQueue(getApplicationContext());
+        navigationView.setCheckedItem(R.id.nav_translate);
+        change2Fragment(new TranslateFragment());
 
-        //在这里进行网络连接的判断，如果没有连接，则进行snackbar的提示
-        //如果有网络连接，则不会有任何的操作
-        if (!NetworkUtil.isNetworkConnected(MainActivity.this)){
-            Snackbar.make(fab,R.string.no_network_connected,Snackbar.LENGTH_LONG)
-                    .setAction(R.string.setting, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(new Intent(Settings.ACTION_SETTINGS));
-                        }
-                    }).show();
+    }
+
+    private void initViews() {
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!NetworkUtil.isNetworkConnected(MainActivity.this)) {
-                    Snackbar.make(fab, R.string.no_network_connected, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.setting, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivity(new Intent(Settings.ACTION_SETTINGS));
-                                }
-                            }).show();
-                } else if (etInput.getText() == null || etInput.getText().length() == 0) {
-                    Snackbar.make(fab, getString(R.string.no_input), Snackbar.LENGTH_SHORT).show();
-                } else {
-
-                    sendReq(inputFormat(String.valueOf(etInput.getText())));
-
-                }
-
-                // 监听输入面板的情况，如果激活则隐藏
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm.isActive()){
-                    imm.hideSoftInputFromWindow(fab.getWindowToken(),0);
-                }
-            }
-        });
-
-        etInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if (count != 0){
-
-                    tvClear.setVisibility(View.VISIBLE);
-
-                    tvClear.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            etInput.setText("");
-                        }
-                    });
-                } else {
-                    tvClear.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_about) {
-
-            Intent intent = new Intent(MainActivity.this,AboutActivity.class);
-            startActivity(intent);
-            return true;
-
-        } else if (id == R.id.action_share){
-            if (result != null){
-                Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
-
-                //组合要分享的内容文本
-                String shareText = getString(R.string.share_text_part1)
-                        + input + "\n"
-                        + getString(R.string.share_text_part2)
-                        + result
-                        + getString(R.string.share_text_part3);
-
-                shareIntent.putExtra(Intent.EXTRA_TEXT,shareText);
-                startActivity(Intent.createChooser(shareIntent,getString(R.string.choose_app_to_share)));
-            } else {
-                Snackbar.make(fab, R.string.no_result_to_share,Snackbar.LENGTH_SHORT).show();
-            }
-
-        } else if (id == R.id.action_setting){
+        if (id == R.id.action_settings) {
 
             NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this)
                     .setSmallIcon(R.drawable.ic_small_icon)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
                     .setContentTitle(getString(R.string.app_name))
-                    .setContentText(result)
+                    .setContentText("通知内容")
                     .setWhen(System.currentTimeMillis())
                     .setPriority(Notification.PRIORITY_DEFAULT)
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(result));
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText("通知内容"));
 
-            PendingIntent intentShare = PendingIntent.getActivity(MainActivity.this,0,new Intent().setAction(Intent.ACTION_SEND),PendingIntent.FLAG_CANCEL_CURRENT);
-            PendingIntent intentCopy = PendingIntent.getActivity(MainActivity.this,1,new Intent().setAction(Intent.ACTION_SEND),PendingIntent.FLAG_CANCEL_CURRENT);
+            Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT,"通知内容");
 
-            //intentShare.send(MainActivity.this,1,);
+            PendingIntent sharePi = PendingIntent.getActivity(MainActivity.this,0,shareIntent,PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent copyPi = PendingIntent.getActivity(MainActivity.this,1,new Intent().setAction(Intent.ACTION_SEND),PendingIntent.FLAG_CANCEL_CURRENT);
 
-            mBuilder.addAction(R.drawable.ic_copy,"复制",intentCopy)
-                    .addAction(R.drawable.ic_share,"分享",intentShare);
+            //intentShare.send(TranslateActivity.this,1,);
+
+            mBuilder.addAction(R.drawable.ic_copy,"复制",sharePi)
+                    .addAction(R.drawable.ic_share,"分享",copyPi);
 
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             manager.notify(0,mBuilder.build());
 
-
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void initViews() {
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        int id = item.getItemId();
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (id == R.id.nav_translate) {
 
-        etInput = (EditText) findViewById(R.id.et_main_input);
-        tvResult = (TextView) findViewById(R.id.tv_show_result);
-        tvClear = (TextView) findViewById(R.id.tv_clear);
-        // 初始化清除按钮，当没有输入时是不可见的
-        tvClear.setVisibility(View.INVISIBLE);
+            toolbar.setTitle(R.string.app_name);
+            change2Fragment(new TranslateFragment());
 
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        } else if (id == R.id.nav_daily) {
 
+            toolbar.setTitle(R.string.daily_one);
+            change2Fragment(new DailyOneFragment());
+
+        } else if (id == R.id.nav_notebook) {
+
+            toolbar.setTitle(R.string.notebook);
+            change2Fragment(new NoteBookFragment());
+
+        } else if (id == R.id.nav_setting) {
+
+
+        } else if (id == R.id.nav_about) {
+
+            startActivity(new Intent(MainActivity.this,AboutActivity.class));
+
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
-    private void sendReq(String in){
-
-        progressBar.setVisibility(View.VISIBLE);
-        tvResult.setVisibility(View.INVISIBLE);
-
-        //将传入的in的值赋值给input,这样在share的时候才会有相应的文本
-        input = in;
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                Constants.YOUDAO_URL + "&key=" + Constants.YOUDAO_KEY + "&type=data&doctype=json&version=1.1&q=" + UTF8Encoder.encode(in),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject jsonObject) {
-
-                        try {
-                            switch (jsonObject.getInt("errorCode")){
-
-                                case 0:
-                                    // 有道翻译
-                                    // 需要进行空值判断
-                                    String dic = "";
-                                    if (!jsonObject.isNull("translation")){
-                                        for (int i = 0;i < jsonObject.getJSONArray("translation").length();i++){
-                                            dic = dic + jsonObject.getJSONArray("translation").getString(i) + "\n";
-                                        }
-                                    }
-
-                                    // 有道词典基本释义
-                                    // 需要进行空值判断
-                                    String basic = "";
-                                    if ( !jsonObject.isNull("basic")){
-                                        for (int i = 0;i < jsonObject.getJSONObject("basic").getJSONArray("explains").length();i++){
-                                            basic = basic + jsonObject.getJSONObject("basic").getJSONArray("explains").getString(i) + ";";
-                                        }
-                                    }
-
-                                    result = getString(R.string.translation) + dic + getString(R.string.basic_meaning) + basic;
-                                    tvResult.setText(result);
-
-                                    break;
-                                case 20:
-                                    Snackbar.make(fab, R.string.error_too_long,Snackbar.LENGTH_SHORT).show();
-                                    break;
-                                case 30:
-                                    Snackbar.make(fab, R.string.unable_to_get_valid_result,Snackbar.LENGTH_SHORT).show();
-                                    break;
-                                case 40:
-                                    Snackbar.make(fab, R.string.unsupported_language_type,Snackbar.LENGTH_SHORT).show();
-                                    break;
-                                case 50:
-                                    Snackbar.make(fab, R.string.invalid_key,Snackbar.LENGTH_SHORT).show();
-                                    break;
-                                case 60:
-                                    Snackbar.make(fab, R.string.no_dic_result,Snackbar.LENGTH_SHORT).show();
-                                    break;
-
-                                default:
-                                    break;
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        progressBar.setVisibility(View.GONE);
-                        tvResult.setVisibility(View.VISIBLE);
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Snackbar.make(fab,volleyError.toString(),Snackbar.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.INVISIBLE);
-                tvResult.setVisibility(View.VISIBLE);
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                HashMap<String,String> headers = new HashMap<String, String>();
-                headers.put("Accept","application/json");
-                headers.put("Content-Type","application/json,charset=UTF-8");
-                return headers;
-            }
-        };
-
-        queue.add(request);
-
-    }
-
-    //去掉输入文本中的回车符号
-    private String inputFormat(String in){
-        in = in.replace("\n","");
-        return in;
+    private void change2Fragment(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_main,fragment).commit();
     }
 
 }

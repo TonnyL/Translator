@@ -4,7 +4,6 @@
     <string name="app_name">简单翻译</string>
     <string name="action_about">关于</string>
     <string name="input_hint">点击输入文字</string>
-    <string name="tips">点击屏幕右方按钮开始翻译,长按翻译结果可以复制</string>
     <string name="no_network_connected">当前没有网络连接</string>
     <string name="no_input">输入为空</string>
     <string name="setting">设置</string>
@@ -55,5 +54,15 @@
     <string name="feedback_advice_description">帮助我改进简单翻译App</string>
     <string name="coffee">请我喝杯咖啡</string>
     <string name="coffee_description">如果你认同我的工作，可以请我喝杯咖啡表示支持</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="translate">翻译</string>
+    <string name="daily_one">每日一句</string>
+    <string name="notebook">笔记本</string>
+    <string name="settings">设置</string>
+    <string name="about">关于</string>
 
 </resources>

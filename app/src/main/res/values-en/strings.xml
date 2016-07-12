@@ -3,7 +3,6 @@
     <string name="app_name">Translator</string>
     <string name="action_about">About</string>
     <string name="input_hint">Please input what you want to translate here.</string>
-    <string name="tips">Tap the floating action button to translate.</string>
     <string name="no_network_connected">No network connection</string>
     <string name="setting">Settings</string>
     <string name="no_input">No input</string>

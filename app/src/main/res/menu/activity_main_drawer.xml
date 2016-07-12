@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_translate"
+            android:icon="@drawable/ic_translate"
+            android:title="@string/translate" />
+        <item
+            android:id="@+id/nav_daily"
+            android:icon="@drawable/ic_stars"
+            android:title="@string/daily_one" />
+        <item
+            android:id="@+id/nav_notebook"
+            android:icon="@drawable/ic_book"
+            android:title="@string/notebook" />
+    </group>
+
+    <item
+        android:id="@+id/nav_setting"
+        android:checkable="false"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
+
+    <item
+        android:id="@+id/nav_about"
+        android:checkable="false"
+        android:icon="@drawable/ic_info"
+        android:title="@string/about" />
+
+</menu>
