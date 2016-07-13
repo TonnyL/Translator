@@ -19,7 +19,7 @@
 
     <string name="donate">Donate us</string>
     <string name="donate_title">Donate</string>
-    <string name="donate_account">18627441225</string>
+    <string name="donate_account">marktonymengyi@gmail.com</string>
     <string name="donate_content">
         Alipay account will be copied to clipboard.Launch Alipay and paste it to finish donating.Thank you!
     </string>
@@ -41,8 +41,6 @@
     <string name="share_text_part2">Translated text:</string>
     <string name="share_text_part3">\nTranslated from @Translator(https://play.google.com/store/apps/details?id=com.marktony.translator)</string>
     <string name="no_app_store">No App store found</string>
-    <string name="translation">Translation:</string>
-    <string name="basic_meaning">Basic meaning:</string>
     <string name="clear">Clear the input</string>
 
     <string name="rate">Rate</string>

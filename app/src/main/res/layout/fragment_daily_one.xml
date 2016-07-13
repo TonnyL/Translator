@@ -10,7 +10,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        card_view:cardCornerRadius="2dp">
+        card_view:cardCornerRadius="2dp"
+        card_view:cardBackgroundColor="@color/colorPrimary">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,6 +31,7 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="Hello,English"
+                android:textColor="@android:color/white"
                 android:textSize="16sp"/>
 
             <TextView
@@ -40,6 +42,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="你好，中文"
+                android:textColor="@android:color/white"
                 android:textSize="17sp"/>
 
             <LinearLayout
@@ -53,13 +56,22 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_translate"/>
+                    android:id="@+id/image_view_mark_star"
+                    android:src="@drawable/ic_star_border_white_24dp"/>
 
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_translate"/>
+                    android:id="@+id/image_view_copy"
+                    android:src="@drawable/ic_copy"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/image_view_share"
+                    android:src="@drawable/ic_share"/>
 
             </LinearLayout>
 

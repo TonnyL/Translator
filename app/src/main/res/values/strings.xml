@@ -19,7 +19,7 @@
     <string name="donate">捐赠开发者</string>
     <string name="donate_content">支付宝账号将会复制到粘贴板，进入支付宝可直接粘贴完成捐赠，感谢您的支持！</string>
     <string name="donate_title">感谢您的捐赠</string>
-    <string name="donate_account">18627441225</string>
+    <string name="donate_account">marktonymengyi@gmail.com</string>
     <string name="OK">确定</string>
     <string name="cancel">取消</string>
 
@@ -38,8 +38,6 @@
     <string name="share_text_part2">译文:</string>
     <string name="share_text_part3">\n分享自 @简单翻译(https://play.google.com/store/apps/details?id=com.marktony.translator)</string>
     <string name="no_app_store">没有找到市场类的App</string>
-    <string name="translation">翻译:</string>
-    <string name="basic_meaning">基本释义:</string>
     <string name="clear">清除已输入内容</string>
 
     <string name="rate">为简单翻译App评分</string>

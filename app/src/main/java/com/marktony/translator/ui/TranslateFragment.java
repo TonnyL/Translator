@@ -1,5 +1,8 @@
 package com.marktony.translator.ui;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +30,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.marktony.translator.R;
 import com.marktony.translator.api.Constants;
+import com.marktony.translator.db.DBUtil;
+import com.marktony.translator.db.NotebookDatabaseHelper;
 import com.marktony.translator.util.NetworkUtil;
+import com.marktony.translator.util.SnackBarHelper;
 import com.marktony.translator.util.UTF8Encoder;
 
 import org.json.JSONException;
@@ -35,6 +41,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 /**
  * Created by lizhaotailang on 2016/7/12.
@@ -53,10 +61,14 @@ public class TranslateFragment extends Fragment {
     private ImageView ivMark;
     private View incView;
 
+    private NotebookDatabaseHelper dbHelper;
+
     private String input = null;
     private String result = null;
 
     private RequestQueue queue;
+
+    private Boolean isMarked = false;
 
     // empty constructor required
     public TranslateFragment(){
@@ -67,6 +79,7 @@ public class TranslateFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        dbHelper = new NotebookDatabaseHelper(getActivity(),"MyStore.db",null,1);
     }
 
     @Nullable
@@ -79,13 +92,7 @@ public class TranslateFragment extends Fragment {
         //在这里进行网络连接的判断，如果没有连接，则进行snackbar的提示
         //如果有网络连接，则不会有任何的操作
         if (!NetworkUtil.isNetworkConnected(getActivity())){
-            Snackbar.make(fab,R.string.no_network_connected,Snackbar.LENGTH_LONG)
-                    .setAction(R.string.setting, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(new Intent(Settings.ACTION_SETTINGS));
-                        }
-                    }).show();
+            showNoNetwork();
         }
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -93,15 +100,11 @@ public class TranslateFragment extends Fragment {
             public void onClick(View view) {
 
                 if (!NetworkUtil.isNetworkConnected(getActivity())) {
-                    Snackbar.make(fab, R.string.no_network_connected, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.setting, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivity(new Intent(Settings.ACTION_SETTINGS));
-                                }
-                            }).show();
+                    showNoNetwork();
                 } else if (etInput.getText() == null || etInput.getText().length() == 0) {
-                    Snackbar.make(fab, getString(R.string.no_input), Snackbar.LENGTH_SHORT).show();
+                    SnackBarHelper helper = new SnackBarHelper(getActivity());
+                    helper.make(fab, getString(R.string.no_input), Snackbar.LENGTH_SHORT);
+                    helper.show();
                 } else {
 
                     sendReq(inputFormat(String.valueOf(etInput.getText())));
@@ -146,6 +149,61 @@ public class TranslateFragment extends Fragment {
             }
         });
 
+        ivMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SnackBarHelper helper = new SnackBarHelper(getActivity());
+
+                // 在没有被收藏的情况下
+                if (!isMarked){
+                    ivMark.setImageResource(R.drawable.ic_star_white_24dp);
+                    helper.make(fab,"战略Mark",Snackbar.LENGTH_SHORT);
+                    isMarked = true;
+
+                    ContentValues values = new ContentValues();
+                    values.put("input",input);
+                    values.put("output",result);
+                    DBUtil.insertValue(dbHelper,values);
+
+                    values.clear();
+
+                } else {
+                    ivMark.setImageResource(R.drawable.ic_star_border_white_24dp);
+                    helper.make(fab,"取消Mark",Snackbar.LENGTH_SHORT);
+                    isMarked = false;
+
+                    DBUtil.deleteValue(dbHelper,input);
+                }
+
+                helper.show();
+            }
+        });
+
+        ivShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND).setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT,result);
+                startActivity(Intent.createChooser(intent,getString(R.string.choose_app_to_share)));
+            }
+        });
+
+        ivCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager manager = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("text", result);
+                manager.setPrimaryClip(clipData);
+
+                SnackBarHelper helper = new SnackBarHelper(getActivity());
+                helper.make(fab,"复制成功",Snackbar.LENGTH_SHORT);
+                helper.show();
+            }
+        });
+
+
         return view;
     }
 
@@ -163,14 +221,17 @@ public class TranslateFragment extends Fragment {
         incView = view.findViewById(R.id.include);
         tvInput = (TextView) view.findViewById(R.id.text_view_input);
         tvOutput = (TextView) view.findViewById(R.id.text_view_output);
-        incView.setVisibility(View.INVISIBLE);
-
+        ivCopy = (ImageView) view.findViewById(R.id.image_view_copy);
+        ivMark = (ImageView) view.findViewById(R.id.image_view_mark_star);
+        ivShare = (ImageView) view.findViewById(R.id.image_view_share);
+        ivMark.setImageResource(R.drawable.ic_star_border_white_24dp);
 
     }
 
     private void sendReq(String in){
 
         progressBar.setVisibility(View.VISIBLE);
+        incView.setVisibility(View.INVISIBLE);
 
         //将传入的in的值赋值给input,这样在share的时候才会有相应的文本
         input = in;
@@ -181,8 +242,11 @@ public class TranslateFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
 
+                        SnackBarHelper helper = new SnackBarHelper(getActivity());
+
                         try {
                             switch (jsonObject.getInt("errorCode")){
+
 
                                 case 0:
                                     // 有道翻译
@@ -190,40 +254,43 @@ public class TranslateFragment extends Fragment {
                                     String dic = "";
                                     if (!jsonObject.isNull("translation")){
                                         for (int i = 0;i < jsonObject.getJSONArray("translation").length();i++){
-                                            dic = dic + jsonObject.getJSONArray("translation").getString(i) + "\n";
+                                            dic = dic + jsonObject.getJSONArray("translation").getString(i);
                                         }
                                     }
 
-                                    // 有道词典基本释义
-                                    // 需要进行空值判断
-                                    String basic = "";
-                                    if ( !jsonObject.isNull("basic")){
-                                        for (int i = 0;i < jsonObject.getJSONObject("basic").getJSONArray("explains").length();i++){
-                                            basic = basic + jsonObject.getJSONObject("basic").getJSONArray("explains").getString(i) + ";";
-                                        }
-                                    }
-
-                                    result = getString(R.string.translation) + dic + getString(R.string.basic_meaning) + basic;
+                                    result = dic;
 
                                     incView.setVisibility(View.VISIBLE);
+                                    if (DBUtil.queryIfItemExist(dbHelper,input)){
+                                        ivMark.setImageResource(R.drawable.ic_star_white_24dp);
+                                        isMarked = true;
+                                    } else {
+                                        ivMark.setImageResource(R.drawable.ic_star_border_white_24dp);
+                                        isMarked = false;
+                                    }
                                     tvInput.setText(input);
                                     tvOutput.setText(result);
 
                                     break;
                                 case 20:
-                                    Snackbar.make(fab, R.string.error_too_long,Snackbar.LENGTH_SHORT).show();
+                                    helper.make(fab,R.string.error_too_long,Snackbar.LENGTH_SHORT);
+                                    helper.show();
                                     break;
                                 case 30:
-                                    Snackbar.make(fab, R.string.unable_to_get_valid_result,Snackbar.LENGTH_SHORT).show();
+                                    helper.make(fab,R.string.unable_to_get_valid_result,Snackbar.LENGTH_SHORT);
+                                    helper.show();
                                     break;
                                 case 40:
-                                    Snackbar.make(fab, R.string.unsupported_language_type,Snackbar.LENGTH_SHORT).show();
+                                    helper.make(fab,R.string.unsupported_language_type,Snackbar.LENGTH_SHORT);
+                                    helper.show();
                                     break;
                                 case 50:
-                                    Snackbar.make(fab, R.string.invalid_key,Snackbar.LENGTH_SHORT).show();
+                                    helper.make(fab,R.string.invalid_key,Snackbar.LENGTH_SHORT);
+                                    helper.show();
                                     break;
                                 case 60:
-                                    Snackbar.make(fab, R.string.no_dic_result,Snackbar.LENGTH_SHORT).show();
+                                    helper.make(fab,R.string.no_dic_result,Snackbar.LENGTH_SHORT);
+                                    helper.show();
                                     break;
 
                                 default:
@@ -236,12 +303,13 @@ public class TranslateFragment extends Fragment {
 
                         progressBar.setVisibility(View.GONE);
 
-
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Snackbar.make(fab,volleyError.toString(),Snackbar.LENGTH_SHORT).show();
+                SnackBarHelper helper = new SnackBarHelper(getActivity());
+                helper.make(fab,volleyError.toString(),Snackbar.LENGTH_SHORT);
+                helper.show();
                 progressBar.setVisibility(View.INVISIBLE);
                 incView.setVisibility(View.INVISIBLE);
             }
@@ -263,6 +331,18 @@ public class TranslateFragment extends Fragment {
     private String inputFormat(String in){
         in = in.replace("\n","");
         return in;
+    }
+
+    private void showNoNetwork(){
+        SnackBarHelper helper = new SnackBarHelper(getActivity());
+        helper.make(fab,R.string.no_network_connected,Snackbar.LENGTH_LONG);
+        helper.setAction(R.string.setting, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Settings.ACTION_SETTINGS));
+            }
+        });
+        helper.show();
     }
 
 }

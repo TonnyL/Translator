@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -64,6 +65,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -85,7 +91,7 @@ public class MainActivity extends AppCompatActivity
                     .setPriority(Notification.PRIORITY_DEFAULT)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText("通知内容"));
 
-            Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND);
+            Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_TEXT,"通知内容");
 
             PendingIntent sharePi = PendingIntent.getActivity(MainActivity.this,0,shareIntent,PendingIntent.FLAG_CANCEL_CURRENT);
@@ -93,8 +99,8 @@ public class MainActivity extends AppCompatActivity
 
             //intentShare.send(TranslateActivity.this,1,);
 
-            mBuilder.addAction(R.drawable.ic_copy,"复制",sharePi)
-                    .addAction(R.drawable.ic_share,"分享",copyPi);
+            mBuilder.addAction(R.drawable.ic_copy,"复制",copyPi)
+                    .addAction(R.drawable.ic_share,"分享",sharePi);
 
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             manager.notify(0,mBuilder.build());

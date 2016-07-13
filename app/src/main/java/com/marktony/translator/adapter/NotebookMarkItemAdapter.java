@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.marktony.translator.R;
+import com.marktony.translator.interfaze.OnRecyclerViewOnClickListener;
 import com.marktony.translator.model.NotebookMarkItem;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class NotebookMarkItemAdapter extends RecyclerView.Adapter<NotebookMarkIt
     private final Context context;
     private final LayoutInflater inflater;
     private ArrayList<NotebookMarkItem> list;
+    private OnRecyclerViewOnClickListener mListener;
 
     public NotebookMarkItemAdapter(Context context, ArrayList<NotebookMarkItem> list){
         this.context = context;
@@ -31,11 +33,11 @@ public class NotebookMarkItemAdapter extends RecyclerView.Adapter<NotebookMarkIt
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ItemViewHolder(inflater.inflate(R.layout.notebook_mark_item,parent,false));
+        return new ItemViewHolder(inflater.inflate(R.layout.notebook_mark_item,parent,false),mListener);
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
+    public void onBindViewHolder(final ItemViewHolder holder, final int position) {
 
         NotebookMarkItem item = list.get(position);
 
@@ -49,7 +51,12 @@ public class NotebookMarkItemAdapter extends RecyclerView.Adapter<NotebookMarkIt
         return list.size();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    public void setItemClickListener(OnRecyclerViewOnClickListener listener){
+        this.mListener = listener;
+    }
+
+
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tvInput;
         TextView tvOutput;
@@ -57,7 +64,9 @@ public class NotebookMarkItemAdapter extends RecyclerView.Adapter<NotebookMarkIt
         ImageView ivCopy;
         ImageView ivShare;
 
-        public ItemViewHolder(View itemView) {
+        OnRecyclerViewOnClickListener listener;
+
+        public ItemViewHolder(View itemView, final OnRecyclerViewOnClickListener listener) {
             super(itemView);
 
             tvInput = (TextView) itemView.findViewById(R.id.text_view_input);
@@ -66,6 +75,37 @@ public class NotebookMarkItemAdapter extends RecyclerView.Adapter<NotebookMarkIt
             ivCopy = (ImageView) itemView.findViewById(R.id.image_view_copy);
             ivShare = (ImageView) itemView.findViewById(R.id.image_view_share);
 
+            this.listener = listener;
+            itemView.setOnClickListener(this);
+
+            ivMarkStar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.OnSubViewClick(ivMarkStar,getLayoutPosition());
+                }
+            });
+
+            ivCopy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.OnSubViewClick(ivCopy,getLayoutPosition());
+                }
+            });
+
+            ivShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.OnSubViewClick(ivShare,getLayoutPosition());
+                }
+            });
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (listener != null){
+                listener.OnItemClick(view,getLayoutPosition());
+            }
         }
     }
 }
