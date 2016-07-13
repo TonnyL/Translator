@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.marktony.translator.R;
+import com.marktony.translator.api.Constants;
 import com.marktony.translator.db.DBUtil;
 import com.marktony.translator.db.NotebookDatabaseHelper;
 import com.marktony.translator.util.SnackBarHelper;
@@ -51,6 +51,8 @@ public class DailyOneFragment extends Fragment {
     private Boolean isMarked = false;
 
     private NotebookDatabaseHelper dbHelper;
+
+    private String imageUrl = null;
 
     public DailyOneFragment(){
 
@@ -81,7 +83,7 @@ public class DailyOneFragment extends Fragment {
                 // 在没有被收藏的情况下
                 if (!isMarked){
                     ivStar.setImageResource(R.drawable.ic_star_white_24dp);
-                    helper.make(ivStar,"战略Mark", Snackbar.LENGTH_SHORT);
+                    helper.make(ivStar,R.string.add_to_notebook, Snackbar.LENGTH_SHORT);
                     isMarked = true;
 
                     ContentValues values = new ContentValues();
@@ -93,7 +95,7 @@ public class DailyOneFragment extends Fragment {
 
                 } else {
                     ivStar.setImageResource(R.drawable.ic_star_border_white_24dp);
-                    helper.make(ivStar,"取消Mark",Snackbar.LENGTH_SHORT);
+                    helper.make(ivStar,getString(R.string.remove_from_notebook),Snackbar.LENGTH_SHORT);
                     isMarked = false;
 
                     DBUtil.deleteValue(dbHelper,textViewEng.getText().toString());
@@ -112,7 +114,7 @@ public class DailyOneFragment extends Fragment {
                 manager.setPrimaryClip(clipData);
 
                 SnackBarHelper helper = new SnackBarHelper(getActivity());
-                helper.make(ivCopy,"复制成功",Snackbar.LENGTH_SHORT);
+                helper.make(ivCopy,R.string.copy_done,Snackbar.LENGTH_SHORT);
                 helper.show();
             }
         });
@@ -143,13 +145,15 @@ public class DailyOneFragment extends Fragment {
     }
 
     private void requestData(){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "http://open.iciba.com/dsapi", new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Constants.DAILY_SENTENTCE, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 try {
 
+                    imageUrl = jsonObject.getString("picture2");
+
                     Glide.with(getActivity())
-                            .load(jsonObject.getString("picture2"))
+                            .load(imageUrl)
                             .asBitmap()
                             .centerCrop()
                             .into(imageViewMain);
@@ -182,6 +186,16 @@ public class DailyOneFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.d("config",newConfig.toString());
+
+        if (imageUrl != null){
+
+            imageViewMain.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            Glide.with(getActivity())
+                    .load(imageUrl)
+                    .asBitmap()
+                    .into(imageViewMain);
+        }
+
     }
 }

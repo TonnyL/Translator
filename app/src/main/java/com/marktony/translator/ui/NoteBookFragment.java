@@ -3,6 +3,7 @@ package com.marktony.translator.ui;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,14 +11,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.marktony.translator.R;
 import com.marktony.translator.adapter.NotebookMarkItemAdapter;
@@ -58,7 +60,7 @@ public class NoteBookFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notebook,container,false);
 
         initViews(view);
@@ -66,7 +68,57 @@ public class NoteBookFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(fab,"fab",Snackbar.LENGTH_SHORT).show();
+                final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+                dialog.setTitle(R.string.add_to_notebook);
+                LayoutInflater li = getActivity().getLayoutInflater();
+                final View v = li.inflate(R.layout.add_note,null);
+                dialog.setView(v);
+
+                dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.OK), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        TextInputEditText etInput = (TextInputEditText) v.findViewById(R.id.et_input);
+                        TextInputEditText etOutput = (TextInputEditText) v.findViewById(R.id.et_output);
+
+                        String in = etInput.getText().toString();
+                        String out = etOutput.getText().toString();
+
+                        if (in.isEmpty() || out.isEmpty()){
+
+                            SnackBarHelper helper = new SnackBarHelper(getActivity());
+                            helper.make(fab,R.string.no_input,Snackbar.LENGTH_SHORT);
+                            helper.show();
+
+                        } else {
+
+                            NotebookMarkItem item = new NotebookMarkItem(in,out);
+
+                            ContentValues values = new ContentValues();
+                            values.put("input",in);
+                            values.put("output",out);
+
+                            DBUtil.insertValue(dbHelper,values);
+
+                            values.clear();
+
+                            list.add(0,item);
+                            adapter.notifyItemInserted(0);
+                            recyclerViewNotebook.smoothScrollToPosition(0);
+                        }
+
+
+                    }
+                });
+
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel) , new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                dialog.show();
             }
         });
 
@@ -85,11 +137,10 @@ public class NoteBookFragment extends Fragment {
 
         cursor.close();
 
+        Collections.reverse(list);
         adapter = new NotebookMarkItemAdapter(getActivity(),list);
         recyclerViewNotebook.setAdapter(adapter);
         adapter.setItemClickListener(new OnRecyclerViewOnClickListener() {
-
-
 
             @Override
             public void OnItemClick(View view, int position) {
@@ -97,37 +148,40 @@ public class NoteBookFragment extends Fragment {
             }
 
             @Override
-            public void OnSubViewClick(View view, int position) {
-
-                NotebookMarkItem item = list.get(position);
+            public void OnSubViewClick(View view, final int position) {
 
                 switch (view.getId()){
+
                     case R.id.image_view_share:
+
+                        NotebookMarkItem item1 = list.get(position);
 
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_SEND).setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_TEXT,String.valueOf(item.getInput() + "\n" + item.getOutput()));
+                        intent.putExtra(Intent.EXTRA_TEXT,String.valueOf(item1.getInput() + "\n" + item1.getOutput()));
                         startActivity(Intent.createChooser(intent,getString(R.string.choose_app_to_share)));
 
                         break;
 
                     case R.id.image_view_copy:
 
+                        NotebookMarkItem item2 = list.get(position);
+
                         ClipboardManager manager = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clipData = ClipData.newPlainText("text", String.valueOf(item.getInput() + "\n" + item.getOutput()));
+                        ClipData clipData = ClipData.newPlainText("text", String.valueOf(item2.getInput() + "\n" + item2.getOutput()));
                         manager.setPrimaryClip(clipData);
 
                         SnackBarHelper helper = new SnackBarHelper(getActivity());
-                        helper.make(fab,"复制成功",Snackbar.LENGTH_SHORT);
+                        helper.make(fab,getString(R.string.copy_done),Snackbar.LENGTH_SHORT);
                         helper.show();
 
                         break;
 
                     case R.id.image_view_mark_star:
 
-                        DBUtil.deleteValue(dbHelper,item.getInput());
+                        final NotebookMarkItem item3 = list.get(position);
 
-                        final NotebookMarkItem i = list.get(position);
+                        DBUtil.deleteValue(dbHelper,item3.getInput());
 
                         list.remove(position);
 
@@ -135,20 +189,23 @@ public class NoteBookFragment extends Fragment {
                         adapter.notifyItemRangeChanged(position,list.size());
 
                         SnackBarHelper h = new SnackBarHelper(getActivity());
-                        h.make(fab,"取消Mark",Snackbar.LENGTH_LONG);
-                        h.setAction("撤销", new View.OnClickListener() {
+                        h.make(fab,getString(R.string.add_to_notebook),Snackbar.LENGTH_LONG);
+                        h.setAction(getString(R.string.undo), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 
                                 ContentValues values = new ContentValues();
-                                values.put("input",i.getInput());
-                                values.put("output",i.getOutput());
+                                values.put("input",item3.getInput());
+                                values.put("output",item3.getOutput());
+
                                 DBUtil.insertValue(dbHelper,values);
 
                                 values.clear();
 
-                                list.add(i);
-                                adapter.notifyItemInserted(0);
+                                list.add(position,item3);
+                                adapter.notifyItemInserted(position);
+                                recyclerViewNotebook.smoothScrollToPosition(position);
+
                             }
                         });
                         h.show();

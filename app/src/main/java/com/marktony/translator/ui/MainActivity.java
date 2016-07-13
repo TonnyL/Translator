@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
 
-            NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this)
+            /*NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this)
                     .setSmallIcon(R.drawable.ic_small_icon)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
                     .setContentTitle(getString(R.string.app_name))
@@ -99,11 +99,13 @@ public class MainActivity extends AppCompatActivity
 
             //intentShare.send(TranslateActivity.this,1,);
 
-            mBuilder.addAction(R.drawable.ic_copy,"复制",copyPi)
-                    .addAction(R.drawable.ic_share,"分享",sharePi);
+            mBuilder.addAction(R.drawable.ic_copy,getString(R.string.copy),copyPi)
+                    .addAction(R.drawable.ic_share,getString(R.string.share),sharePi);
 
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            manager.notify(0,mBuilder.build());
+            manager.notify(0,mBuilder.build());*/
+
+            startActivity(new Intent(MainActivity.this,SearchActivity.class));
 
             return true;
         }

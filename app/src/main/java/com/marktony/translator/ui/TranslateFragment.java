@@ -56,8 +56,6 @@ public class TranslateFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView tvInput;
     private TextView tvOutput;
-    private ImageView ivShare;
-    private ImageView ivCopy;
     private ImageView ivMark;
     private View incView;
 
@@ -158,7 +156,7 @@ public class TranslateFragment extends Fragment {
                 // 在没有被收藏的情况下
                 if (!isMarked){
                     ivMark.setImageResource(R.drawable.ic_star_white_24dp);
-                    helper.make(fab,"战略Mark",Snackbar.LENGTH_SHORT);
+                    helper.make(fab,R.string.add_to_notebook,Snackbar.LENGTH_SHORT);
                     isMarked = true;
 
                     ContentValues values = new ContentValues();
@@ -170,7 +168,7 @@ public class TranslateFragment extends Fragment {
 
                 } else {
                     ivMark.setImageResource(R.drawable.ic_star_border_white_24dp);
-                    helper.make(fab,"取消Mark",Snackbar.LENGTH_SHORT);
+                    helper.make(fab,R.string.remove_from_notebook,Snackbar.LENGTH_SHORT);
                     isMarked = false;
 
                     DBUtil.deleteValue(dbHelper,input);
@@ -180,7 +178,7 @@ public class TranslateFragment extends Fragment {
             }
         });
 
-        ivShare.setOnClickListener(new View.OnClickListener() {
+        incView.findViewById(R.id.image_view_share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -190,7 +188,7 @@ public class TranslateFragment extends Fragment {
             }
         });
 
-        ivCopy.setOnClickListener(new View.OnClickListener() {
+        incView.findViewById(R.id.image_view_copy).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ClipboardManager manager = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
@@ -198,7 +196,7 @@ public class TranslateFragment extends Fragment {
                 manager.setPrimaryClip(clipData);
 
                 SnackBarHelper helper = new SnackBarHelper(getActivity());
-                helper.make(fab,"复制成功",Snackbar.LENGTH_SHORT);
+                helper.make(fab,R.string.copy_done,Snackbar.LENGTH_SHORT);
                 helper.show();
             }
         });
@@ -221,9 +219,7 @@ public class TranslateFragment extends Fragment {
         incView = view.findViewById(R.id.include);
         tvInput = (TextView) view.findViewById(R.id.text_view_input);
         tvOutput = (TextView) view.findViewById(R.id.text_view_output);
-        ivCopy = (ImageView) view.findViewById(R.id.image_view_copy);
         ivMark = (ImageView) view.findViewById(R.id.image_view_mark_star);
-        ivShare = (ImageView) view.findViewById(R.id.image_view_share);
         ivMark.setImageResource(R.drawable.ic_star_border_white_24dp);
 
     }
