@@ -5,8 +5,8 @@ package com.marktony.translator.api;
  */
 public class Constants {
 
-    public static final String YOUDAO_KEY = "1329500205";
-    public static final String YOUDAO_URL = "http://fanyi.youdao.com/openapi.do?keyfrom=marktonytranslator";
+    public static final String YOUDAO_KEY = "";
+    public static final String YOUDAO_URL = "";
 
-    public static final String DAILY_SENTENTCE = "http://open.iciba.com/dsapi";
+    public static final String DAILY_SENTENCE = "http://open.iciba.com/dsapi";
 }
