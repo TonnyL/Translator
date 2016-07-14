@@ -42,9 +42,7 @@ public class AboutActivity extends AppCompatActivity {
                     Uri uri = Uri.parse(getString(R.string.sendto));
                     Intent intent = new Intent(Intent.ACTION_SENDTO,uri);
                     intent.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.topic));
-                    intent.putExtra(Intent.EXTRA_TEXT,
-                            getString(R.string.phone_model) + Build.MODEL
-                                    + "\n" + getString(R.string.sdk_version) + Build.VERSION.RELEASE + "\n");
+                    intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.sdk_version) + Build.VERSION.RELEASE + "\n");
                     startActivity(intent);
                 }catch (android.content.ActivityNotFoundException ex){
                     Snackbar.make(layoutFeedbackAdvice, R.string.no_mail_app,Snackbar.LENGTH_SHORT).show();

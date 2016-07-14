@@ -7,4 +7,10 @@
     <dimen name="input_height">200dp</dimen>
     <dimen name="result_min_height">96dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
+
+    <dimen name="bodyPrimaryTextSizeEnglish">14sp</dimen>
+    <dimen name="bodyPrimaryTextSizeChinese">15sp</dimen>
+    <dimen name="bodySecondaryTextSizeEnglish">12sp</dimen>
+    <dimen name="bodySecondaryTextSizeChinese">13sp</dimen>
+
 </resources>

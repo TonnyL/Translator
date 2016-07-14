@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.marktony.translator.R;
 import com.marktony.translator.adapter.NotebookMarkItemAdapter;
@@ -44,6 +45,7 @@ public class NoteBookFragment extends Fragment {
     private FloatingActionButton fab;
     private ArrayList<NotebookMarkItem> list = new ArrayList<NotebookMarkItem>();
     private NotebookMarkItemAdapter adapter;
+    private TextView tvNoNote;
 
     private NotebookDatabaseHelper dbHelper;
 
@@ -92,6 +94,10 @@ public class NoteBookFragment extends Fragment {
 
                         } else {
 
+                            if (tvNoNote.getVisibility() == View.VISIBLE){
+                                tvNoNote.setVisibility(View.GONE);
+                            }
+
                             NotebookMarkItem item = new NotebookMarkItem(in,out);
 
                             ContentValues values = new ContentValues();
@@ -136,6 +142,10 @@ public class NoteBookFragment extends Fragment {
         }
 
         cursor.close();
+
+        if (list.isEmpty()){
+            tvNoNote.setVisibility(View.VISIBLE);
+        }
 
         Collections.reverse(list);
         adapter = new NotebookMarkItemAdapter(getActivity(),list);
@@ -227,6 +237,8 @@ public class NoteBookFragment extends Fragment {
         recyclerViewNotebook.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
+        tvNoNote = (TextView) view.findViewById(R.id.tv_no_note);
 
     }
 

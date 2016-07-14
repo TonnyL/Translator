@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Translator</string>
-    <string name="action_about">About</string>
     <string name="input_hint">Please input what you want to translate here.</string>
     <string name="no_network_connected">No network connection</string>
     <string name="setting">Settings</string>
@@ -13,7 +12,6 @@
 
     <string name="choose_mail">Choose mail apps</string>
     <string name="topic">Translator feedback and advice</string>
-    <string name="phone_model">Phone model:</string>
     <string name="sdk_version">SDK version:</string>
     <string name="sendto">mailto:marktonymengyi@gmail.com</string>
 
@@ -23,7 +21,7 @@
     <string name="donate_content">
         Alipay account will be copied to clipboard.Launch Alipay and paste it to finish donating.Thank you!
     </string>
-    <string name="OK">YES</string>
+    <string name="OK">OK</string>
     <string name="cancel">CANCEL</string>
 
     <string name="error_too_long">The input is too long</string>
@@ -37,9 +35,6 @@
     <string name="share_results">Share translation results</string>
     <string name="no_result_to_share">No results to share</string>
     <string name="choose_app_to_share">Please choose one app</string>
-    <string name="share_text_part1">Source text:</string>
-    <string name="share_text_part2">Translated text:</string>
-    <string name="share_text_part3">\nTranslated from @Translator(https://play.google.com/store/apps/details?id=com.marktony.translator)</string>
     <string name="no_app_store">No App store found</string>
     <string name="clear">Clear the input</string>
 
@@ -55,5 +50,27 @@
     <string name="feedback_advice_description">Help me to improve the Translator app.</string>
     <string name="coffee">Give me a cup of coffee</string>
     <string name="coffee_description">If you think I deserve to get paid for my work, you can leave me a little money.</string>
+
+
+    <string name="action_search">Search notes</string>
+    <string name="translate">Translate</string>
+    <string name="daily_one">Daily sentence</string>
+    <string name="notebook">Notebook</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="add_to_notebook">Add to notebook</string>
+    <string name="undo">UNDO</string>
+    <string name="copy_done">Copy done</string>
+    <string name="remove_from_notebook">Remove from notebook</string>
+    <string name="original_text">Original text</string>
+    <string name="translated_text">Translated text</string>
+    <string name="copy">Copy</string>
+    <string name="share">Share</string>
+    <string name="no_related_note">No result</string>
+    <string name="daily_sen_text_1">Hello,world</string>
+    <string name="daily_sen_text_2">你好，世界</string>
+    <string name="start_tap_translate">Enable Tap to Translate(Lab function)</string>
+    <string name="start_tap_translate_script">Just copy text for an instant translation</string>
+    <string name="no_note">No note</string>
 
 </resources>

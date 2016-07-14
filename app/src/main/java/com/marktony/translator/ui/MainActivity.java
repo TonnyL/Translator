@@ -1,11 +1,7 @@
 package com.marktony.translator.ui;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,7 +9,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,29 +77,6 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.action_search) {
 
-            /*NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this)
-                    .setSmallIcon(R.drawable.ic_small_icon)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
-                    .setContentTitle(getString(R.string.app_name))
-                    .setContentText("通知内容")
-                    .setWhen(System.currentTimeMillis())
-                    .setPriority(Notification.PRIORITY_DEFAULT)
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText("通知内容"));
-
-            Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT,"通知内容");
-
-            PendingIntent sharePi = PendingIntent.getActivity(MainActivity.this,0,shareIntent,PendingIntent.FLAG_CANCEL_CURRENT);
-            PendingIntent copyPi = PendingIntent.getActivity(MainActivity.this,1,new Intent().setAction(Intent.ACTION_SEND),PendingIntent.FLAG_CANCEL_CURRENT);
-
-            //intentShare.send(TranslateActivity.this,1,);
-
-            mBuilder.addAction(R.drawable.ic_copy,getString(R.string.copy),copyPi)
-                    .addAction(R.drawable.ic_share,getString(R.string.share),sharePi);
-
-            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            manager.notify(0,mBuilder.build());*/
-
             startActivity(new Intent(MainActivity.this,SearchActivity.class));
 
             return true;
@@ -136,6 +108,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_setting) {
 
+            startActivity(new Intent(MainActivity.this,SettingsActivity.class));
 
         } else if (id == R.id.nav_about) {
 

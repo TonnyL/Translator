@@ -247,7 +247,7 @@ public class TranslateFragment extends Fragment {
                                 case 0:
                                     // 有道翻译
                                     // 需要进行空值判断
-                                    String dic = "";
+                                    String dic = input + "\n";
                                     if (!jsonObject.isNull("translation")){
                                         for (int i = 0;i < jsonObject.getJSONArray("translation").length();i++){
                                             dic = dic + jsonObject.getJSONArray("translation").getString(i);

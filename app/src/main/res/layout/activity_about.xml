@@ -68,7 +68,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="32dp"
                             android:text="@string/rate"
-                            android:gravity="center_vertical"/>
+                            android:gravity="center_vertical"
+                            android:id="@+id/textView" />
 
                         <TextView
                             android:layout_width="match_parent"
