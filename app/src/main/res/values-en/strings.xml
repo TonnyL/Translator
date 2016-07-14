@@ -51,6 +51,8 @@
     <string name="coffee">Give me a cup of coffee</string>
     <string name="coffee_description">If you think I deserve to get paid for my work, you can leave me a little money.</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_search">Search notes</string>
     <string name="translate">Translate</string>

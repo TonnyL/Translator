@@ -1,8 +1,8 @@
 # Translator 简单翻译
 
-Translator is a translation app based on Android platform. The API comes from **[Youdao](http://fanyi.youdao.com/openapi)**. Before building my project, you should apply the key and replace my key with yours.
+Translator is a translation app based on Android platform. The API comes from **[Youdao](http://fanyi.youdao.com/openapi)**. Before building the project, please apply the key and replace my key with yours.
 
-简单翻译是一款基于Android平台的翻译类App,所使用的API来自**[有道翻译API](http://fanyi.youdao.com/openapi)**。创建project之前，你应该先申请key并且将我的key替换为你的。
+简单翻译是一款基于Android平台的翻译类App,所使用的API来自**[有道翻译API](http://fanyi.youdao.com/openapi)**。创建project之前，请将我的key替换为你的。
 
 ## Screenshot 运行截图
 ![0](https://github.com/marktony/Translator/blob/master/screenshots/0.png)
