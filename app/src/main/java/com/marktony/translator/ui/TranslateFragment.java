@@ -341,7 +341,7 @@ public class TranslateFragment extends Fragment {
 
     private void showNoNetwork(){
         SnackBarHelper helper = new SnackBarHelper(getActivity());
-        helper.make(fab,R.string.no_network_connected,Snackbar.LENGTH_LONG);
+        helper.make(fab,R.string.no_network_connection,Snackbar.LENGTH_LONG);
         helper.setAction(R.string.setting, new View.OnClickListener() {
             @Override
             public void onClick(View view) {

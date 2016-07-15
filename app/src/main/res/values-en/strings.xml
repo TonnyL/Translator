@@ -2,11 +2,11 @@
 <resources>
     <string name="app_name">Translator</string>
     <string name="input_hint">Please input what you want to translate here.</string>
-    <string name="no_network_connected">No network connection</string>
+    <string name="no_network_connection">No network connection</string>
     <string name="setting">Settings</string>
     <string name="no_input">No input</string>
     <string name="title_activity_about">About</string>
-    <string name="version">Version:1.3.0</string>
+    <string name="version">Version:1.3.1</string>
 
     <string name="got_it">Got it</string>
 
@@ -75,5 +75,6 @@
     <string name="start_tap_translate_script">Just copy text for an instant translation</string>
     <string name="no_note">No note</string>
     <string name="pronunciation">Pronunciation:</string>
+    <string name="network_error">Network error …</string>
 
 </resources>

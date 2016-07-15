@@ -154,7 +154,7 @@ public class ClipboardService extends Service {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                Toast.makeText(ClipboardService.this, R.string.network_error,Toast.LENGTH_SHORT).show();
             }
         }){
             @Override

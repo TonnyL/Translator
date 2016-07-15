@@ -2,11 +2,11 @@
 
     <string name="app_name">简单翻译</string>
     <string name="input_hint">点击输入文字</string>
-    <string name="no_network_connected">当前没有网络连接</string>
+    <string name="no_network_connection">当前没有网络连接</string>
     <string name="no_input">输入为空</string>
     <string name="setting">设置</string>
     <string name="title_activity_about">关于</string>
-    <string name="version">version:1.3.0</string>
+    <string name="version">version:1.3.1</string>
     <string name="got_it">知道了</string>
     <string name="topic">简单翻译使用反馈</string>
     <string name="sdk_version">SDK版本:</string>
@@ -71,5 +71,7 @@
     <string name="start_tap_translate_script">只需要复制文字即可获取即时翻译</string>
     <string name="no_note">没有笔记</string>
     <string name="pronunciation">发音:</string>
+    <string name="network_error">网络出问题啦</string>
+
 
 </resources>
