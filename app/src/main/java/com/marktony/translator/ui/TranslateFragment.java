@@ -247,16 +247,26 @@ public class TranslateFragment extends Fragment {
                                 case 0:
                                     // 有道翻译
                                     // 需要进行空值判断
-                                    String dic = input + "\n";
+                                    String dic = "";
                                     if (!jsonObject.isNull("translation")){
                                         for (int i = 0;i < jsonObject.getJSONArray("translation").length();i++){
                                             dic = dic + jsonObject.getJSONArray("translation").getString(i);
+                                        }
+
+                                        dic = dic + "\n";
+                                    }
+
+                                    if (!jsonObject.isNull("basic")){
+                                        dic = dic + getString(R.string.pronunciation) + jsonObject.getJSONObject("basic").getString("phonetic") + "\n";
+                                        for (int i = 0; i < jsonObject.getJSONObject("basic").getJSONArray("explains").length(); i++){
+                                            dic = dic + jsonObject.getJSONObject("basic").getJSONArray("explains").getString(i) + "; ";
                                         }
                                     }
 
                                     result = dic;
 
                                     incView.setVisibility(View.VISIBLE);
+
                                     if (DBUtil.queryIfItemExist(dbHelper,input)){
                                         ivMark.setImageResource(R.drawable.ic_star_white_24dp);
                                         isMarked = true;

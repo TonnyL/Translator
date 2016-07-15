@@ -1,7 +1,6 @@
 package com.marktony.translator.ui;
 
-import android.app.ActivityManager;
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -18,22 +17,31 @@ import com.marktony.translator.util.ServiceUtil;
 public class SettingsActivity extends AppCompatActivity {
 
     private CheckBox cbTapTrans;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        sp = getSharedPreferences("settings",MODE_PRIVATE);
+        editor = sp.edit();
 
         initViews();
 
         cbTapTrans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (cbTapTrans.isChecked()){
+                // checkbox is checked and service is not running
+                if (cbTapTrans.isChecked() && !new ServiceUtil().isMyServiceRunning(SettingsActivity.this,ClipboardService.class)){
                     startService(new Intent(SettingsActivity.this, ClipboardService.class));
-                } else if (!cbTapTrans.isChecked()){
+                    editor.putBoolean("enable_clipboard_service",true);
+                } else if (!cbTapTrans.isChecked() && new ServiceUtil().isMyServiceRunning(SettingsActivity.this,ClipboardService.class)){
                     stopService(new Intent(SettingsActivity.this,ClipboardService.class));
+                    editor.putBoolean("enable_clipboard_service",false);
                 }
+
+                editor.apply();
             }
         });
 

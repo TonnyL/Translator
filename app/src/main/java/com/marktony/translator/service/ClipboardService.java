@@ -94,6 +94,15 @@ public class ClipboardService extends Service {
                                         for (int i = 0;i < jsonObject.getJSONArray("translation").length();i++){
                                             dic = dic + jsonObject.getJSONArray("translation").getString(i);
                                         }
+
+                                        dic = dic + "\n";
+                                    }
+
+                                    if (!jsonObject.isNull("basic")){
+                                        dic = dic + getString(R.string.pronunciation) + jsonObject.getJSONObject("basic").getString("phonetic") + "\n";
+                                        for (int i = 0; i < jsonObject.getJSONObject("basic").getJSONArray("explains").length(); i++){
+                                            dic = dic + jsonObject.getJSONObject("basic").getJSONArray("explains").getString(i) + "; ";
+                                        }
                                     }
 
                                     NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(ClipboardService.this)
@@ -108,7 +117,7 @@ public class ClipboardService extends Service {
                                     Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
                                     shareIntent.putExtra(Intent.EXTRA_TEXT,dic);
 
-                                    PendingIntent sharePi = PendingIntent.getActivity(ClipboardService.this,0,shareIntent,Notification.FLAG_AUTO_CANCEL);
+                                    PendingIntent sharePi = PendingIntent.getActivity(ClipboardService.this,0,shareIntent,0);
 
                                     mBuilder.addAction(R.drawable.ic_share,getString(R.string.share),sharePi);
 
