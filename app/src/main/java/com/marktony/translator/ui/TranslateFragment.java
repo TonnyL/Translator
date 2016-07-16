@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -244,6 +245,7 @@ public class TranslateFragment extends Fragment {
                             switch (jsonObject.getInt("errorCode")){
 
 
+
                                 case 0:
                                     // 有道翻译
                                     // 需要进行空值判断
@@ -257,7 +259,11 @@ public class TranslateFragment extends Fragment {
                                     }
 
                                     if (!jsonObject.isNull("basic")){
-                                        dic = dic + getString(R.string.pronunciation) + jsonObject.getJSONObject("basic").getString("phonetic") + "\n";
+
+                                        if (!jsonObject.getJSONObject("basic").isNull("phonetic")){
+                                            dic = dic + getString(R.string.pronunciation) + jsonObject.getJSONObject("basic").getString("phonetic") + "\n";
+                                        }
+
                                         for (int i = 0; i < jsonObject.getJSONObject("basic").getJSONArray("explains").length(); i++){
                                             dic = dic + jsonObject.getJSONObject("basic").getJSONArray("explains").getString(i) + "; ";
                                         }

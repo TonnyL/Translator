@@ -99,7 +99,11 @@ public class ClipboardService extends Service {
                                     }
 
                                     if (!jsonObject.isNull("basic")){
-                                        dic = dic + getString(R.string.pronunciation) + jsonObject.getJSONObject("basic").getString("phonetic") + "\n";
+
+                                        if (!jsonObject.getJSONObject("basic").isNull("phonetic")){
+                                            dic = dic + getString(R.string.pronunciation) + jsonObject.getJSONObject("basic").getString("phonetic") + "\n";
+                                        }
+
                                         for (int i = 0; i < jsonObject.getJSONObject("basic").getJSONArray("explains").length(); i++){
                                             dic = dic + jsonObject.getJSONObject("basic").getJSONArray("explains").getString(i) + "; ";
                                         }
