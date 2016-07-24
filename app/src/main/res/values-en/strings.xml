@@ -72,7 +72,7 @@
     <string name="no_related_note">No result</string>
     <string name="daily_sen_text_1">Hello,world</string>
     <string name="daily_sen_text_2">你好，世界</string>
-    <string name="start_tap_translate">Enable Tap to Translate(Lab function)</string>
+    <string name="start_tap_translate">Enable Tap to Translate</string>
     <string name="start_tap_translate_script">Just copy text for an instant translation</string>
     <string name="no_note">No note</string>
     <string name="pronunciation">Pronunciation:</string>

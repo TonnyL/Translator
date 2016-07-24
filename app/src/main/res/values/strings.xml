@@ -68,7 +68,7 @@
     <string name="no_related_note">没有找到相关的笔记</string>
     <string name="daily_sen_text_1">Hello,world</string>
     <string name="daily_sen_text_2">你好，世界</string>
-    <string name="start_tap_translate">启用"点按翻译"功能(试验功能)</string>
+    <string name="start_tap_translate">启用点按翻译功能</string>
     <string name="start_tap_translate_script">只需要复制文字即可获取即时翻译</string>
     <string name="no_note">没有笔记</string>
     <string name="pronunciation">发音:</string>
