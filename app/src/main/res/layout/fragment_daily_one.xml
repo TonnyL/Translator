@@ -34,7 +34,7 @@
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="@string/daily_sen_text_1"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/body_primary_text_size_english"/>
+                android:textSize="@dimen/body1_primary"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="@string/daily_sen_text_2"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/body_primary_text_size_chinese"/>
+                android:textSize="@dimen/body1_primary"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

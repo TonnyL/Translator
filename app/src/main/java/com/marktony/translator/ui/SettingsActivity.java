@@ -32,18 +32,26 @@ public class SettingsActivity extends AppCompatActivity {
         cbTapTrans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // checkbox is checked and service is not running
-                if (cbTapTrans.isChecked() && !new ServiceUtil().isMyServiceRunning(SettingsActivity.this,ClipboardService.class)){
-                    startService(new Intent(SettingsActivity.this, ClipboardService.class));
-                    editor.putBoolean("enable_clipboard_service",true);
-                } else if (!cbTapTrans.isChecked() && new ServiceUtil().isMyServiceRunning(SettingsActivity.this,ClipboardService.class)){
-                    stopService(new Intent(SettingsActivity.this,ClipboardService.class));
-                    editor.putBoolean("enable_clipboard_service",false);
-                }
 
-                editor.apply();
+                handleTapTrans();
+
             }
         });
+
+        findViewById(R.id.layout_tap_translate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                cbTapTrans.setChecked(!cbTapTrans.isChecked());
+
+                handleTapTrans();
+
+            }
+        });
+
+        // a simpler way to solve this problem is to implement the View.OnClickListener interface
+        // just need to judge the view's id which was clicked.
+        // In that way could reduce some code.
 
     }
 
@@ -65,5 +73,20 @@ public class SettingsActivity extends AppCompatActivity {
 
         cbTapTrans = (CheckBox) findViewById(R.id.cb_tap_trans);
         cbTapTrans.setChecked(new ServiceUtil().isMyServiceRunning(SettingsActivity.this,ClipboardService.class));
+
     }
+
+    private void handleTapTrans(){
+
+        if (cbTapTrans.isChecked() && !new ServiceUtil().isMyServiceRunning(SettingsActivity.this,ClipboardService.class)){
+            startService(new Intent(SettingsActivity.this, ClipboardService.class));
+            editor.putBoolean("enable_clipboard_service",true);
+        } else if (!cbTapTrans.isChecked() && new ServiceUtil().isMyServiceRunning(SettingsActivity.this,ClipboardService.class)){
+            stopService(new Intent(SettingsActivity.this,ClipboardService.class));
+            editor.putBoolean("enable_clipboard_service",false);
+        }
+
+        editor.apply();
+    }
+
 }

@@ -8,12 +8,10 @@
     <dimen name="result_min_height">96dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
 
-    <dimen name="body_primary_text_size_english">14sp</dimen>
-    <dimen name="body_primary_text_size_chinese">15sp</dimen>
-    <dimen name="body_secondary_text_size_english">12sp</dimen>
-    <dimen name="body_secondary_text_size_chinese">13sp</dimen>
-
     <dimen name="card_view_horizontal_margin">8dp</dimen>
     <dimen name="card_view_vertical_margin">8dp</dimen>
+
+    <dimen name="body1_primary">15sp</dimen>
+    <dimen name="caption_primary">13sp</dimen>
 
 </resources>

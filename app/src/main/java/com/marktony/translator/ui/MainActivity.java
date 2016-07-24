@@ -54,9 +54,9 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
+        super.onBackPressed();
+
     }
 
     @Override
@@ -73,13 +73,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
-
-        if (id == R.id.action_search) {
-
-            startActivity(new Intent(MainActivity.this,SearchActivity.class));
-
-            return true;
+        if (item.getItemId() == R.id.action_search){
+            startActivity(new Intent(MainActivity.this, SearchActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

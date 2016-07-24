@@ -3,6 +3,7 @@ package com.marktony.translator.ui;
 import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +16,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,9 +35,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class SearchActivity extends AppCompatActivity {
-
-    private SearchView searchView;
-    private SearchView.OnQueryTextListener listener;
 
     private RecyclerView recyclerView;
     private TextView textView;
@@ -66,68 +63,21 @@ public class SearchActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text_view);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
+        handleIntent(getIntent());
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search,menu);
-        final MenuItem item = menu.findItem(R.id.action_search);
-        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        if (item != null){
-            searchView = (SearchView) item.getActionView();
-        }
-
-        if (searchView != null){
-            searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-
-            listener = new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextChange(String newText) {
-
-                    if (!list.isEmpty()){
-                        list.clear();
-                        recyclerView.removeAllViews();
-                        textView.setVisibility(View.GONE);
-                    }
-
-                    return true;
-                }
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-
-                    progressBar.setVisibility(View.VISIBLE);
-
-                    Cursor cursor = db.query("notebook",null,null,null,null,null,null);
-                    if (cursor.moveToFirst()){
-                        do {
-                            String in = cursor.getString(cursor.getColumnIndex("input"));
-                            String out = cursor.getString(cursor.getColumnIndex("output"));
-
-                            if (in.contains(query) || out.contains(query)){
-                                NotebookMarkItem item1 = new NotebookMarkItem(in,out);
-                                list.add(item1);
-                            }
-
-                        } while (cursor.moveToNext());
-                    }
-
-                    cursor.close();
-
-                    if (list.isEmpty()){
-                        textView.setVisibility(View.VISIBLE);
-                    } else {
-                        textView.setVisibility(View.GONE);
-                        handleResults();
-                    }
-
-                    progressBar.setVisibility(View.GONE);
-
-                    return true;
-                }
-            };
-            searchView.setOnQueryTextListener(listener);
-        }
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(new ComponentName(getApplicationContext(),SearchActivity.class)));
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -230,8 +180,6 @@ public class SearchActivity extends AppCompatActivity {
             return false;
         }
 
-        searchView.setOnQueryTextListener(listener);
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -242,5 +190,44 @@ public class SearchActivity extends AppCompatActivity {
         if (imm.isActive()){
             imm.hideSoftInputFromWindow(recyclerView.getWindowToken(),0);
         }
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            progressBar.setVisibility(View.VISIBLE);
+
+            Cursor cursor = db.query("notebook",null,null,null,null,null,null);
+            if (cursor.moveToFirst()){
+                do {
+                    String in = cursor.getString(cursor.getColumnIndex("input"));
+                    String out = cursor.getString(cursor.getColumnIndex("output"));
+
+                    if (in.contains(query) || out.contains(query)){
+                        NotebookMarkItem item1 = new NotebookMarkItem(in,out);
+                        list.add(item1);
+                    }
+
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+
+            if (list.isEmpty()){
+                textView.setVisibility(View.VISIBLE);
+            } else {
+                textView.setVisibility(View.GONE);
+                handleResults();
+            }
+
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
     }
 }

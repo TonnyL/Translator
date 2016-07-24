@@ -27,7 +27,8 @@
                 android:background="@color/colorPrimary"
                 android:textColor="@android:color/white"
                 android:cursorVisible="true"
-                android:textCursorDrawable="@null" />
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/body1_primary"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,7 +38,8 @@
                 android:textColor="@color/colorPrimary"
                 android:gravity="center_vertical"
                 android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginStart="16dp" />
+                android:layout_marginStart="16dp"
+                android:textSize="@dimen/body1_primary"/>
 
             <ProgressBar
                 android:layout_width="wrap_content"
@@ -61,8 +63,8 @@
         android:background="@color/colorPrimary"
         app:layout_anchor="@id/et_main_input"
         app:layout_anchorGravity="bottom|end"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:src="@drawable/ok" />
 
 </android.support.design.widget.CoordinatorLayout>

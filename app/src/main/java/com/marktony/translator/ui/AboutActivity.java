@@ -14,18 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.content.ClipboardManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.marktony.translator.R;
 
 public class AboutActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private LinearLayout layoutRate;
-    private LinearLayout layoutFeedbackAdvice;
-    private LinearLayout layoutDonate;
-    private TextView tvGitHub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +28,7 @@ public class AboutActivity extends AppCompatActivity {
 
         initViews();
 
-        layoutFeedbackAdvice.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.layout_bugs).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -45,13 +39,13 @@ public class AboutActivity extends AppCompatActivity {
                     intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.sdk_version) + Build.VERSION.RELEASE + "\n");
                     startActivity(intent);
                 }catch (android.content.ActivityNotFoundException ex){
-                    Snackbar.make(layoutFeedbackAdvice, R.string.no_mail_app,Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(toolbar, R.string.no_mail_app,Snackbar.LENGTH_SHORT).show();
                 }
 
             }
         });
 
-        layoutDonate.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.layout_support).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -78,7 +72,7 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-        layoutRate.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.layout_rate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -88,16 +82,23 @@ public class AboutActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } catch (android.content.ActivityNotFoundException ex){
-                    Snackbar.make(layoutRate, R.string.no_app_store,Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(toolbar, R.string.no_app_store,Snackbar.LENGTH_SHORT).show();
                 }
 
             }
         });
 
-        tvGitHub.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_github).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getString(R.string.github_url))));
+            }
+        });
+
+        findViewById(R.id.tv_open_source_licenses).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AboutActivity.this,OpenSourceLicensesActivity.class));
             }
         });
 
@@ -121,14 +122,7 @@ public class AboutActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        layoutRate = (LinearLayout) findViewById(R.id.LL_rate);
-        layoutFeedbackAdvice = (LinearLayout) findViewById(R.id.LL_bugs);
-        layoutDonate = (LinearLayout) findViewById(R.id.LL_support);
-
-        tvGitHub = (TextView) findViewById(R.id.tv_github);
 
     }
 

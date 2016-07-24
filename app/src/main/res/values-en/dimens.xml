@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="body1_primary">14sp</dimen>
+    <dimen name="caption_primary">12sp</dimen>
+</resources>
