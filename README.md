@@ -18,10 +18,23 @@ Translator is a translation app based on Android platform. The API comes from **
 ## Open Source Project 相关项目
 * [Volley](https://android.googlesource.com/platform/frameworks/volley)
 
+## 我的其他项目
++ [纸飞机](https://github.com/marktony/ZhiHuDaily) -- 采用MVP架构，集合了知乎日报、果壳精选和豆瓣一刻的综合性阅读客户端
++ [知乎专栏](https://github.com/marktony/zhuanlan) -- 知乎专栏API分析 + 第三方知乎专栏Android客户端
++ [饭否精选](https://github.com/marktony/FanfouHandpick) -- 使用Kotlin开发的饭否精选客户端
++ [Reader](https://github.com/marktony/Reader) -- MVP + Volley + Gson, 内容包含了糗事百科，煎蛋和内涵段子
+
 ## Contact me 联系我
 marktonymengyi#gmail.com
 
 [Blog](http://marktony.github.io/)
+
+## Support me 支持我的工作
+If you think, I deserve to get paid for my work, you can leave me a little money here.
+
+如果你认为我值得获得一定的报酬，请扫描下面的二维码向我捐赠。
+
+![Wechat_QRCode](https://github.com/marktony/FanfouHandpick/blob/master/screenshots/wechat_qrcode.png)
 
 ## License 许可证
     Copyright 2016 lizhaotailang
