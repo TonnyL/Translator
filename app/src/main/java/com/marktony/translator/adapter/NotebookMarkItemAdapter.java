@@ -69,7 +69,6 @@ public class NotebookMarkItemAdapter extends RecyclerView.Adapter<NotebookMarkIt
         public ItemViewHolder(View itemView, final OnRecyclerViewOnClickListener listener) {
             super(itemView);
 
-            tvInput = (TextView) itemView.findViewById(R.id.text_view_input);
             tvOutput = (TextView) itemView.findViewById(R.id.text_view_output);
             ivMarkStar = (ImageView) itemView.findViewById(R.id.image_view_mark_star);
             ivCopy = (ImageView) itemView.findViewById(R.id.image_view_copy);

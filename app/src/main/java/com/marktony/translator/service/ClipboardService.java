@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,7 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.marktony.translator.R;
-import com.marktony.translator.api.Constants;
+import com.marktony.translator.constant.Constants;
 import com.marktony.translator.util.UTF8Encoder;
 
 import org.json.JSONException;
@@ -123,7 +122,7 @@ public class ClipboardService extends Service {
 
                                     PendingIntent sharePi = PendingIntent.getActivity(ClipboardService.this,0,shareIntent,0);
 
-                                    mBuilder.addAction(R.drawable.ic_share,getString(R.string.share),sharePi);
+                                    mBuilder.addAction(R.drawable.ic_share_white_24dp,getString(R.string.share),sharePi);
 
                                     NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                                     manager.notify(0,mBuilder.build());

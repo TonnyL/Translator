@@ -3,8 +3,10 @@ package com.marktony.translator.ui;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +23,10 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private Toolbar toolbar;
 
+    private NoteBookFragment noteBookFragment;
+    private DailyOneFragment dailyOneFragment;
+    private TranslateFragment translateFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,8 +34,33 @@ public class MainActivity extends AppCompatActivity
 
         initViews();
 
+        if (savedInstanceState != null) {
+            FragmentManager manager = getSupportFragmentManager();
+            noteBookFragment = (NoteBookFragment) manager.getFragment(savedInstanceState, "noteBookFragment");
+            dailyOneFragment = (DailyOneFragment) manager.getFragment(savedInstanceState, "dailyOneFragment");
+            translateFragment = (TranslateFragment) manager.getFragment(savedInstanceState, "translateFragment");
+        } else {
+            noteBookFragment = new NoteBookFragment();
+            dailyOneFragment = new DailyOneFragment();
+            translateFragment = new TranslateFragment();
+        }
+
+        FragmentManager manager = getSupportFragmentManager();
+
+        manager.beginTransaction()
+                .add(R.id.container_main, translateFragment, "translateFragment")
+                .commit();
+
+        manager.beginTransaction()
+                .add(R.id.container_main, dailyOneFragment, "dailyOneFragment")
+                .commit();
+
+        manager.beginTransaction()
+                .add(R.id.container_main, noteBookFragment, "noteBookFragment")
+                .commit();
+
+        showHideFragment(0);
         navigationView.setCheckedItem(R.id.nav_translate);
-        change2Fragment(new TranslateFragment());
 
     }
 
@@ -82,24 +113,21 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
 
         if (id == R.id.nav_translate) {
 
-            toolbar.setTitle(R.string.app_name);
-            change2Fragment(new TranslateFragment());
+            showHideFragment(0);
 
         } else if (id == R.id.nav_daily) {
 
-            toolbar.setTitle(R.string.daily_one);
-            change2Fragment(new DailyOneFragment());
+            showHideFragment(1);
 
         } else if (id == R.id.nav_notebook) {
 
-            toolbar.setTitle(R.string.notebook);
-            change2Fragment(new NoteBookFragment());
+            showHideFragment(2);
 
         } else if (id == R.id.nav_setting) {
 
@@ -115,8 +143,50 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void change2Fragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_main,fragment).commit();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (translateFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, "translateFragment", translateFragment);
+        }
+
+        if (noteBookFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, "noteBookFragment", noteBookFragment);
+        }
+
+        if (dailyOneFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, "dailyOneFragment", dailyOneFragment);
+        }
+
+    }
+
+    /**
+     * show or hide the fragment
+     * and handle other operations like set toolbar's title
+     * set the navigation's checked item
+     * @param position which fragment to show, only 3 values at this time
+     *                 0 for translate fragment
+     *                 1 for daily one fragment
+     *                 2 for notebook fragment
+     */
+    private void showHideFragment(@IntRange(from = 0, to = 2) int position) {
+
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().hide(translateFragment).commit();
+        manager.beginTransaction().hide(noteBookFragment).commit();
+        manager.beginTransaction().hide(dailyOneFragment).commit();
+
+        if (position == 0) {
+            manager.beginTransaction().show(translateFragment).commit();
+            toolbar.setTitle(R.string.app_name);
+        } else if (position == 1) {
+            toolbar.setTitle(R.string.daily_one);
+            manager.beginTransaction().show(dailyOneFragment).commit();
+        } else if (position == 2) {
+            toolbar.setTitle(R.string.notebook);
+            manager.beginTransaction().show(noteBookFragment).commit();
+        }
+
     }
 
 }

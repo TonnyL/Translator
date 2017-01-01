@@ -1,38 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <EditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="@dimen/input_height"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:id="@+id/et_main_input"
+            android:gravity="top"
+            android:hint="@string/input_hint"
+            android:textColorHint="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/body1_primary" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/input_height"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:id="@+id/et_main_input"
-                android:gravity="top"
-                android:hint="@string/input_hint"
-                android:textColorHint="@android:color/white"
-                android:background="@color/colorPrimary"
-                android:textColor="@android:color/white"
-                android:cursorVisible="true"
-                android:textCursorDrawable="@null"
-                android:textSize="@dimen/body1_primary"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="match_parent"
                 android:id="@+id/tv_clear"
                 android:text="@string/clear"
                 android:textColor="@color/colorPrimary"
@@ -41,30 +40,49 @@
                 android:layout_marginStart="16dp"
                 android:textSize="@dimen/body1_primary"/>
 
-            <ProgressBar
+            <android.support.v7.widget.AppCompatButton
                 android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:id="@+id/buttonTranslate"
+                android:text="@string/translate"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/colorPrimary"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textColor="@android:color/white"/>
+
+        </RelativeLayout>
+
+
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progress_bar"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <include layout="@layout/notebook_mark_item"
+            android:id="@+id/include"
+            android:visibility="invisible"/>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/progress_bar"
-                android:layout_gravity="center"
-                android:visibility="gone"/>
+                android:id="@+id/recyclerView" />
 
-                <include layout="@layout/notebook_mark_item"
-                    android:id="@+id/include"
-                    android:visibility="invisible"/>
+        </android.support.v7.widget.CardView>
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:layout_anchor="@id/et_main_input"
-        app:layout_anchorGravity="bottom|end"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:src="@drawable/ok" />
-
-</android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.NestedScrollView>

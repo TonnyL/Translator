@@ -8,12 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,21 +28,21 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
 import com.marktony.translator.R;
-import com.marktony.translator.api.Constants;
+import com.marktony.translator.adapter.SampleAdapter;
+import com.marktony.translator.constant.Constants;
 import com.marktony.translator.db.DBUtil;
 import com.marktony.translator.db.NotebookDatabaseHelper;
+import com.marktony.translator.model.BingModel;
 import com.marktony.translator.util.NetworkUtil;
 import com.marktony.translator.util.SnackBarHelper;
-import com.marktony.translator.util.UTF8Encoder;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -51,19 +52,22 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class TranslateFragment extends Fragment {
 
-    private FloatingActionButton fab;
-    private EditText etInput;
-    private TextView tvClear;
+    private EditText editText;
+    private TextView textViewClear;
     private ProgressBar progressBar;
-    private TextView tvInput;
-    private TextView tvOutput;
-    private ImageView ivMark;
-    private View incView;
+    private TextView textViewResult;
+    private ImageView imageViewMark;
+    private View viewResult;
+    private AppCompatButton button;
+
+    private ArrayList<BingModel.Sample> samples;
+    private RecyclerView recyclerView;
+    private SampleAdapter adapter;
 
     private NotebookDatabaseHelper dbHelper;
 
-    private String input = null;
     private String result = null;
+    private BingModel model;
 
     private RequestQueue queue;
 
@@ -72,6 +76,10 @@ public class TranslateFragment extends Fragment {
     // empty constructor required
     public TranslateFragment(){
 
+    }
+
+    public static TranslateFragment newInstance() {
+        return new TranslateFragment();
     }
 
     @Override
@@ -94,31 +102,33 @@ public class TranslateFragment extends Fragment {
             showNoNetwork();
         }
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (!NetworkUtil.isNetworkConnected(getActivity())) {
                     showNoNetwork();
-                } else if (etInput.getText() == null || etInput.getText().length() == 0) {
+                } else if (editText.getText() == null || editText.getText().length() == 0) {
                     SnackBarHelper helper = new SnackBarHelper(getActivity());
-                    helper.make(fab, getString(R.string.no_input), Snackbar.LENGTH_SHORT);
+                    helper.make(button, getString(R.string.no_input), Snackbar.LENGTH_SHORT);
                     helper.show();
                 } else {
 
-                    sendReq(inputFormat(String.valueOf(etInput.getText())));
+                    sendReq(editText.getText().toString());
 
-                }
-
-                // 监听输入面板的情况，如果激活则隐藏
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm.isActive()){
-                    imm.hideSoftInputFromWindow(fab.getWindowToken(),0);
                 }
             }
         });
 
-        etInput.addTextChangedListener(new TextWatcher() {
+        textViewClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setText("");
+            }
+        });
+
+        editText.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -127,18 +137,17 @@ public class TranslateFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (count != 0){
-
-                    tvClear.setVisibility(View.VISIBLE);
-
-                    tvClear.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            etInput.setText("");
-                        }
-                    });
+                if (editText.getEditableText().toString().length() != 0){
+                    textViewClear.setVisibility(View.VISIBLE);
                 } else {
-                    tvClear.setVisibility(View.INVISIBLE);
+                    textViewClear.setVisibility(View.INVISIBLE);
+                }
+
+                // handle the situation when text ends up with enter
+                // 监听回车事件
+                if (count == 1 && s.charAt(start) == '\n') {
+                    editText.getText().replace(start, start + 1, "");
+                    sendReq(editText.getEditableText().toString());
                 }
             }
 
@@ -148,7 +157,7 @@ public class TranslateFragment extends Fragment {
             }
         });
 
-        ivMark.setOnClickListener(new View.OnClickListener() {
+        imageViewMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -156,30 +165,30 @@ public class TranslateFragment extends Fragment {
 
                 // 在没有被收藏的情况下
                 if (!isMarked){
-                    ivMark.setImageResource(R.drawable.ic_star_white_24dp);
-                    helper.make(fab,R.string.add_to_notebook,Snackbar.LENGTH_SHORT);
+                    imageViewMark.setImageResource(R.drawable.ic_grade_white_24dp);
+                    helper.make(button,R.string.add_to_notebook,Snackbar.LENGTH_SHORT);
                     isMarked = true;
 
                     ContentValues values = new ContentValues();
-                    values.put("input",input);
+                    values.put("input",model.getWord());
                     values.put("output",result);
                     DBUtil.insertValue(dbHelper,values);
 
                     values.clear();
 
                 } else {
-                    ivMark.setImageResource(R.drawable.ic_star_border_white_24dp);
-                    helper.make(fab,R.string.remove_from_notebook,Snackbar.LENGTH_SHORT);
+                    imageViewMark.setImageResource(R.drawable.ic_star_border_white_24dp);
+                    helper.make(button,R.string.remove_from_notebook,Snackbar.LENGTH_SHORT);
                     isMarked = false;
 
-                    DBUtil.deleteValue(dbHelper,input);
+                    DBUtil.deleteValue(dbHelper, model.getWord());
                 }
 
                 helper.show();
             }
         });
 
-        incView.findViewById(R.id.image_view_share).setOnClickListener(new View.OnClickListener() {
+        viewResult.findViewById(R.id.image_view_share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -189,7 +198,7 @@ public class TranslateFragment extends Fragment {
             }
         });
 
-        incView.findViewById(R.id.image_view_copy).setOnClickListener(new View.OnClickListener() {
+        viewResult.findViewById(R.id.image_view_copy).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ClipboardManager manager = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
@@ -197,7 +206,7 @@ public class TranslateFragment extends Fragment {
                 manager.setPrimaryClip(clipData);
 
                 SnackBarHelper helper = new SnackBarHelper(getActivity());
-                helper.make(fab,R.string.copy_done,Snackbar.LENGTH_SHORT);
+                helper.make(button,R.string.copy_done,Snackbar.LENGTH_SHORT);
                 helper.show();
             }
         });
@@ -208,109 +217,89 @@ public class TranslateFragment extends Fragment {
 
     private void initViews(View view) {
 
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-
-        etInput = (EditText) view.findViewById(R.id.et_main_input);
-        tvClear = (TextView) view.findViewById(R.id.tv_clear);
+        editText = (EditText) view.findViewById(R.id.et_main_input);
+        textViewClear = (TextView) view.findViewById(R.id.tv_clear);
         // 初始化清除按钮，当没有输入时是不可见的
-        tvClear.setVisibility(View.INVISIBLE);
+        textViewClear.setVisibility(View.INVISIBLE);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
-        incView = view.findViewById(R.id.include);
-        tvInput = (TextView) view.findViewById(R.id.text_view_input);
-        tvOutput = (TextView) view.findViewById(R.id.text_view_output);
-        ivMark = (ImageView) view.findViewById(R.id.image_view_mark_star);
-        ivMark.setImageResource(R.drawable.ic_star_border_white_24dp);
+        viewResult = view.findViewById(R.id.include);
+        textViewResult = (TextView) view.findViewById(R.id.text_view_output);
+        imageViewMark = (ImageView) view.findViewById(R.id.image_view_mark_star);
+        imageViewMark.setImageResource(R.drawable.ic_star_border_white_24dp);
 
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setNestedScrollingEnabled(false);
+
+        button = (AppCompatButton) view.findViewById(R.id.buttonTranslate);
     }
 
     private void sendReq(String in){
 
         progressBar.setVisibility(View.VISIBLE);
-        incView.setVisibility(View.INVISIBLE);
+        viewResult.setVisibility(View.INVISIBLE);
 
-        //将传入的in的值赋值给input,这样在share的时候才会有相应的文本
-        input = in;
+        // 监听输入面板的情况，如果激活则隐藏
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()){
+            imm.hideSoftInputFromWindow(button.getWindowToken(),0);
+        }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                Constants.YOUDAO_URL + "&key=" + Constants.YOUDAO_KEY + "&type=data&doctype=json&version=1.1&q=" + UTF8Encoder.encode(in),
-                new Response.Listener<JSONObject>() {
+        in = inputFormat(in);
+
+        StringRequest request = new StringRequest(Request.Method.GET,
+                Constants.BING_BASE + "?Word=" + in,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject jsonObject) {
-
-                        SnackBarHelper helper = new SnackBarHelper(getActivity());
+                    public void onResponse(String s) {
 
                         try {
-                            switch (jsonObject.getInt("errorCode")){
 
+                            Gson gson = new Gson();
+                            model = gson.fromJson(s, BingModel.class);
 
+                            if (model != null) {
 
-                                case 0:
-                                    // 有道翻译
-                                    // 需要进行空值判断
-                                    String dic = "";
-                                    if (!jsonObject.isNull("translation")){
-                                        for (int i = 0;i < jsonObject.getJSONArray("translation").length();i++){
-                                            dic = dic + jsonObject.getJSONArray("translation").getString(i);
-                                        }
+                                result = model.getWord() + "\n";
 
-                                        dic = dic + "\n";
+                                if (model.getPronunciation() != null) {
+                                    BingModel.Pronunciation p = model.getPronunciation();
+                                    result = result + "\nAmE:" + p.getAmE() + "\nBrE:" + p.getBrE() + "\n";
+                                }
+
+                                for (BingModel.Definition def : model.getDefs()) {
+                                    result = result + def.getPos() + "\n" + def.getDef() + "\n";
+                                }
+
+                                if (model.getSams().size() != 0) {
+
+                                    if (samples == null) {
+                                        samples = new ArrayList<>();
                                     }
 
-                                    if (!jsonObject.isNull("basic")){
+                                    samples.clear();
 
-                                        if (!jsonObject.getJSONObject("basic").isNull("phonetic")){
-                                            dic = dic + getString(R.string.pronunciation) + jsonObject.getJSONObject("basic").getString("phonetic") + "\n";
-                                        }
-
-                                        for (int i = 0; i < jsonObject.getJSONObject("basic").getJSONArray("explains").length(); i++){
-                                            dic = dic + jsonObject.getJSONObject("basic").getJSONArray("explains").getString(i) + "; ";
-                                        }
+                                    for (BingModel.Sample sample : model.getSams()) {
+                                        samples.add(sample);
                                     }
 
-                                    result = dic;
-
-                                    incView.setVisibility(View.VISIBLE);
-
-                                    if (DBUtil.queryIfItemExist(dbHelper,input)){
-                                        ivMark.setImageResource(R.drawable.ic_star_white_24dp);
-                                        isMarked = true;
+                                    if (adapter == null) {
+                                        adapter = new SampleAdapter(getActivity(), samples);
+                                        recyclerView.setAdapter(adapter);
                                     } else {
-                                        ivMark.setImageResource(R.drawable.ic_star_border_white_24dp);
-                                        isMarked = false;
+                                        adapter.notifyDataSetChanged();
                                     }
-                                    tvInput.setText(input);
-                                    tvOutput.setText(result);
+                                }
 
-                                    break;
-                                case 20:
-                                    helper.make(fab,R.string.error_too_long,Snackbar.LENGTH_SHORT);
-                                    helper.show();
-                                    break;
-                                case 30:
-                                    helper.make(fab,R.string.unable_to_get_valid_result,Snackbar.LENGTH_SHORT);
-                                    helper.show();
-                                    break;
-                                case 40:
-                                    helper.make(fab,R.string.unsupported_language_type,Snackbar.LENGTH_SHORT);
-                                    helper.show();
-                                    break;
-                                case 50:
-                                    helper.make(fab,R.string.invalid_key,Snackbar.LENGTH_SHORT);
-                                    helper.show();
-                                    break;
-                                case 60:
-                                    helper.make(fab,R.string.no_dic_result,Snackbar.LENGTH_SHORT);
-                                    helper.show();
-                                    break;
+                                progressBar.setVisibility(View.INVISIBLE);
+                                viewResult.setVisibility(View.VISIBLE);
 
-                                default:
-                                    break;
-
+                                textViewResult.setText(result);
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } catch (JsonSyntaxException ex) {
+
                         }
 
                         progressBar.setVisibility(View.GONE);
@@ -319,21 +308,9 @@ public class TranslateFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                SnackBarHelper helper = new SnackBarHelper(getActivity());
-                helper.make(fab,volleyError.toString(),Snackbar.LENGTH_SHORT);
-                helper.show();
-                progressBar.setVisibility(View.INVISIBLE);
-                incView.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                HashMap<String,String> headers = new HashMap<String, String>();
-                headers.put("Accept","application/json");
-                headers.put("Content-Type","application/json,charset=UTF-8");
-                return headers;
-            }
-        };
+        });
 
         queue.add(request);
 
@@ -347,7 +324,7 @@ public class TranslateFragment extends Fragment {
 
     private void showNoNetwork(){
         SnackBarHelper helper = new SnackBarHelper(getActivity());
-        helper.make(fab,R.string.no_network_connection,Snackbar.LENGTH_LONG);
+        helper.make(button,R.string.no_network_connection,Snackbar.LENGTH_LONG);
         helper.setAction(R.string.setting, new View.OnClickListener() {
             @Override
             public void onClick(View view) {

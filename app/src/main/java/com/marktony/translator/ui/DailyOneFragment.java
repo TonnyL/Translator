@@ -23,7 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.marktony.translator.R;
-import com.marktony.translator.api.Constants;
+import com.marktony.translator.constant.Constants;
 import com.marktony.translator.db.DBUtil;
 import com.marktony.translator.db.NotebookDatabaseHelper;
 import com.marktony.translator.util.SnackBarHelper;
@@ -82,7 +82,7 @@ public class DailyOneFragment extends Fragment {
 
                 // 在没有被收藏的情况下
                 if (!isMarked){
-                    ivStar.setImageResource(R.drawable.ic_star_white_24dp);
+                    ivStar.setImageResource(R.drawable.ic_grade_white_24dp);
                     helper.make(ivStar,R.string.add_to_notebook, Snackbar.LENGTH_SHORT);
                     isMarked = true;
 
@@ -162,7 +162,7 @@ public class DailyOneFragment extends Fragment {
                     textViewChi.setText(jsonObject.getString("note"));
 
                     if (DBUtil.queryIfItemExist(dbHelper,textViewEng.getText().toString())){
-                        ivStar.setImageResource(R.drawable.ic_star_white_24dp);
+                        ivStar.setImageResource(R.drawable.ic_grade_white_24dp);
                         isMarked = true;
                     } else {
                         ivStar.setImageResource(R.drawable.ic_star_border_white_24dp);

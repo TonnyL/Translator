@@ -7,6 +7,7 @@
     android:layout_marginLeft="@dimen/card_view_horizontal_margin"
     android:layout_marginRight="@dimen/card_view_horizontal_margin"
     card_view:cardCornerRadius="2dp"
+    card_view:cardUseCompatPadding="false"
     card_view:cardBackgroundColor="@color/colorPrimary">
 
     <LinearLayout
@@ -17,23 +18,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:id="@+id/text_view_input"
-            android:text="原文"
-            android:textSize="@dimen/body1_primary"
-            android:textColor="@android:color/white"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/text_view_output"
             android:layout_marginTop="16dp"
             android:textSize="@dimen/body1_primary"
-            android:text="译文"
             android:textColor="@android:color/white"/>
 
         <LinearLayout
@@ -48,21 +37,21 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/image_view_mark_star"
-                android:src="@drawable/ic_star_white_24dp"/>
+                android:src="@drawable/ic_grade_white_24dp"/>
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/image_view_copy"
-                android:src="@drawable/ic_copy"/>
+                android:src="@drawable/ic_content_copy_white_24dp"/>
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/image_view_share"
-                android:src="@drawable/ic_share"/>
+                android:src="@drawable/ic_share_white_24dp"/>
 
         </LinearLayout>
 
