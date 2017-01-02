@@ -28,6 +28,8 @@
     <string name="error">An error occurred</string>
 
     <string name="add_to_notebook">Added to notebook</string>
+    <string name="original_text">Original</string>
+    <string name="translated_text">Translated</string>
     <string name="remove_from_notebook">Removed from notebook</string>
     <string name="undo">UNDO</string>
     <string name="copy_done">Text copied</string>
