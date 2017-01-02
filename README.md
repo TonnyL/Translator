@@ -13,16 +13,24 @@ Translator is a translation app based on Android platform. The API comes from **
 * [豌豆荚](http://www.wandoujia.com/apps/com.marktony.translator)
 * [魅族应用商店](http://app.flyme.cn/apps/public/detail?package_name=com.marktony.translator)
 * [腾讯应用宝](http://android.myapp.com/myapp/detail.htm?apkName=com.marktony.translator)
-* [百度手机助手](http://shouji.baidu.com/software/item?docid=9165471&from=as)
+* [酷市场](http://coolapk.com/apk/com.marktony.translator)
+* [Google Drive](https://drive.google.com/open?id=0B3yYs4KaSVg_UkhLZnUzdUVrc2c)
 
 ## Open Source Project 相关项目
-* [Volley](https://android.googlesource.com/platform/frameworks/volley)
+Project | Introduction
+--------- | --------
+[Volley](https://android.googlesource.com/platform/frameworks/volley/) | Volley is an HTTP library that makes networking for Android apps easier and most importantly, faster. Volley is available through the open AOSP repository.
+[Glide](https://github.com/bumptech/glide) | An image loading and caching library for Android focused on smooth scrolling.
+[Android Support Libraries](https://developer.android.com/topic/libraries/support-library/index.html) | The Android Support Library offers a number of features that are not built into the framework. These libraries offer backward-compatible versions of new features, provide useful UI elements that are not included in the framework, and provide a range of utilities that apps can draw on.
+[Gson](https://github.com/google/gson) | A Java serialization/deserialization library that can convert Java Objects into JSON and back.
 
-## 我的其他项目
-+ [Paper Plane 纸飞机](https://github.com/marktony/ZhiHuDaily) -- MVP Architecture, Including the Content of Zhihu Daily, Guokr Handpick and Douban Handpick 采用MVP架构，集合了知乎日报、果壳精选和豆瓣一刻的综合性阅读客户端
-+ [Zhihu Zhuanlan 知乎专栏](https://github.com/marktony/zhuanlan) -- Analysis of Zhihu Zhuanlan's API + Unofficial Android App of Zhihu Zhuanlan 知乎专栏API分析 + 第三方知乎专栏Android客户端
-+ [Fanfou Handpick 饭否精选](https://github.com/marktony/FanfouHandpick) -- A Fanfou Handpick Client Developed by Kotlin 使用Kotlin开发的饭否精选客户端
-+ [Reader](https://github.com/marktony/Reader) -- MVP + Volley + Gson, the content comes from Qiubai, Jiandan and Neihanduanzi   MVP + Volley + Gson, 内容包含了糗事百科，煎蛋和内涵段子
+## Other Repository of Mine 我的其他项目
+Name | Introdution
+----- | -----
+[Paper Plane 纸飞机](https://github.com/marktony/ZhiHuDaily) | MVP Architecture, Including the Content of Zhihu Daily, Guokr Handpick and Douban Handpick 采用MVP架构，集合了知乎日报、果壳精选和豆瓣一刻的综合性阅读客户端
+[Zhihu Zhuanlan 知乎专栏](https://github.com/marktony/zhuanlan) | Analysis of Zhihu Zhuanlan's API + Unofficial Android App of Zhihu Zhuanlan 知乎专栏API分析 第三方知乎专栏Android客户端
+[Fanfou Handpick 饭否精选](https://github.com/marktony/FanfouHandpick) | A Fanfou Handpick Client Developed by Kotlin 使用Kotlin开发的饭否精选客户端
+[Reader](https://github.com/marktony/Reader) | MVP + Volley + Gson, the content comes from Qiubai, Jiandan and Neihanduanzi   MVP + Volley + Gson, 内容包含了糗事百科，煎蛋和内涵段子
 
 ## Contact me 联系我
 marktonymengyi#gmail.com
