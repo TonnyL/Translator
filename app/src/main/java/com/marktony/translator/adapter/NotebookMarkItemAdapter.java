@@ -1,6 +1,7 @@
 package com.marktony.translator.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ public class NotebookMarkItemAdapter extends RecyclerView.Adapter<NotebookMarkIt
     private ArrayList<NotebookMarkItem> list;
     private OnRecyclerViewOnClickListener mListener;
 
-    public NotebookMarkItemAdapter(Context context, ArrayList<NotebookMarkItem> list){
+    public NotebookMarkItemAdapter(@NonNull Context context, ArrayList<NotebookMarkItem> list){
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
@@ -38,12 +39,8 @@ public class NotebookMarkItemAdapter extends RecyclerView.Adapter<NotebookMarkIt
 
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, final int position) {
-
         NotebookMarkItem item = list.get(position);
-
-        holder.tvInput.setText(item.getInput());
-        holder.tvOutput.setText(item.getOutput());
-
+        holder.tvOutput.setText(item.getInput() + "\n" + item.getOutput());
     }
 
     @Override
@@ -55,10 +52,8 @@ public class NotebookMarkItemAdapter extends RecyclerView.Adapter<NotebookMarkIt
         this.mListener = listener;
     }
 
-
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView tvInput;
         TextView tvOutput;
         ImageView ivMarkStar;
         ImageView ivCopy;

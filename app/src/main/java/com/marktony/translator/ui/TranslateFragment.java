@@ -5,11 +5,13 @@ import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +42,6 @@ import com.marktony.translator.db.DBUtil;
 import com.marktony.translator.db.NotebookDatabaseHelper;
 import com.marktony.translator.model.BingModel;
 import com.marktony.translator.util.NetworkUtil;
-import com.marktony.translator.util.SnackBarHelper;
 
 import java.util.ArrayList;
 
@@ -71,7 +72,9 @@ public class TranslateFragment extends Fragment {
 
     private RequestQueue queue;
 
-    private Boolean isMarked = false;
+    private boolean isMarked = false;
+    private boolean completeWithEnter;
+    private boolean showSamples;
 
     // empty constructor required
     public TranslateFragment(){
@@ -109,9 +112,8 @@ public class TranslateFragment extends Fragment {
                 if (!NetworkUtil.isNetworkConnected(getActivity())) {
                     showNoNetwork();
                 } else if (editText.getText() == null || editText.getText().length() == 0) {
-                    SnackBarHelper helper = new SnackBarHelper(getActivity());
-                    helper.make(button, getString(R.string.no_input), Snackbar.LENGTH_SHORT);
-                    helper.show();
+                    Snackbar.make(button, getString(R.string.no_input), Snackbar.LENGTH_SHORT)
+                            .show();
                 } else {
 
                     sendReq(editText.getText().toString());
@@ -145,10 +147,13 @@ public class TranslateFragment extends Fragment {
 
                 // handle the situation when text ends up with enter
                 // 监听回车事件
-                if (count == 1 && s.charAt(start) == '\n') {
-                    editText.getText().replace(start, start + 1, "");
-                    sendReq(editText.getEditableText().toString());
+                if (completeWithEnter) {
+                    if (count == 1 && s.charAt(start) == '\n') {
+                        editText.getText().replace(start, start + 1, "");
+                        sendReq(editText.getEditableText().toString());
+                    }
                 }
+
             }
 
             @Override
@@ -161,12 +166,11 @@ public class TranslateFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                SnackBarHelper helper = new SnackBarHelper(getActivity());
-
                 // 在没有被收藏的情况下
                 if (!isMarked){
                     imageViewMark.setImageResource(R.drawable.ic_grade_white_24dp);
-                    helper.make(button,R.string.add_to_notebook,Snackbar.LENGTH_SHORT);
+                    Snackbar.make(button, R.string.add_to_notebook,Snackbar.LENGTH_SHORT)
+                            .show();
                     isMarked = true;
 
                     ContentValues values = new ContentValues();
@@ -178,13 +182,13 @@ public class TranslateFragment extends Fragment {
 
                 } else {
                     imageViewMark.setImageResource(R.drawable.ic_star_border_white_24dp);
-                    helper.make(button,R.string.remove_from_notebook,Snackbar.LENGTH_SHORT);
+                    Snackbar.make(button,R.string.remove_from_notebook,Snackbar.LENGTH_SHORT)
+                            .show();
                     isMarked = false;
 
                     DBUtil.deleteValue(dbHelper, model.getWord());
                 }
 
-                helper.show();
             }
         });
 
@@ -205,9 +209,8 @@ public class TranslateFragment extends Fragment {
                 ClipData clipData = ClipData.newPlainText("text", result);
                 manager.setPrimaryClip(clipData);
 
-                SnackBarHelper helper = new SnackBarHelper(getActivity());
-                helper.make(button,R.string.copy_done,Snackbar.LENGTH_SHORT);
-                helper.show();
+                Snackbar.make(button,R.string.copy_done,Snackbar.LENGTH_SHORT)
+                        .show();
             }
         });
 
@@ -249,8 +252,16 @@ public class TranslateFragment extends Fragment {
 
         in = inputFormat(in);
 
+        String url = Constants.BING_BASE + "?Word=" + in + "&Samples=";
+
+        if (showSamples) {
+            url += "true";
+        } else {
+            url += "false";
+        }
+
         StringRequest request = new StringRequest(Request.Method.GET,
-                Constants.BING_BASE + "?Word=" + in,
+                url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -264,6 +275,14 @@ public class TranslateFragment extends Fragment {
 
                                 result = model.getWord() + "\n";
 
+                                if (DBUtil.queryIfItemExist(dbHelper, model.getWord())) {
+                                    imageViewMark.setImageResource(R.drawable.ic_grade_white_24dp);
+                                    isMarked = true;
+                                } else {
+                                    imageViewMark.setImageResource(R.drawable.ic_star_border_white_24dp);
+                                    isMarked = false;
+                                }
+
                                 if (model.getPronunciation() != null) {
                                     BingModel.Pronunciation p = model.getPronunciation();
                                     result = result + "\nAmE:" + p.getAmE() + "\nBrE:" + p.getBrE() + "\n";
@@ -273,7 +292,9 @@ public class TranslateFragment extends Fragment {
                                     result = result + def.getPos() + "\n" + def.getDef() + "\n";
                                 }
 
-                                if (model.getSams().size() != 0) {
+                                result = result.substring(0, result.length() - 1);
+
+                                if (model.getSams() != null && model.getSams().size() != 0) {
 
                                     if (samples == null) {
                                         samples = new ArrayList<>();
@@ -299,7 +320,7 @@ public class TranslateFragment extends Fragment {
                                 textViewResult.setText(result);
                             }
                         } catch (JsonSyntaxException ex) {
-
+                            showTransError();
                         }
 
                         progressBar.setVisibility(View.GONE);
@@ -309,6 +330,7 @@ public class TranslateFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 progressBar.setVisibility(View.GONE);
+                showTransError();
             }
         });
 
@@ -323,15 +345,36 @@ public class TranslateFragment extends Fragment {
     }
 
     private void showNoNetwork(){
-        SnackBarHelper helper = new SnackBarHelper(getActivity());
-        helper.make(button,R.string.no_network_connection,Snackbar.LENGTH_LONG);
-        helper.setAction(R.string.setting, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Settings.ACTION_SETTINGS));
-            }
-        });
-        helper.show();
+        Snackbar.make(button, R.string.no_network_connection, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.settings, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(Settings.ACTION_SETTINGS));
+                    }
+                }).show();
     }
 
+    private void showTransError() {
+        Snackbar.make(button, R.string.trans_error, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                }).show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        completeWithEnter = sp.getBoolean("enter_key", false);
+        showSamples = sp.getBoolean("samples", true);
+        if (samples != null) {
+            samples.clear();
+        }
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.preference.PreferenceCategory
+        android:title="@string/basic_settings">
+
+        <android.support.v7.preference.CheckBoxPreference
+            android:title="@string/start_tap_translate"
+            android:key="tap_translate"
+            android:defaultValue="false"
+            android:summary="@string/start_tap_translate_script" />
+
+        <android.support.v7.preference.CheckBoxPreference
+            android:title="@string/enter_key"
+            android:key="enter_key"
+            android:defaultValue="false" />
+
+        <android.support.v7.preference.CheckBoxPreference
+            android:title="@string/show_samples"
+            android:key="samples"
+            android:defaultValue="true" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.Preference
+        android:title="@string/github_source"
+        android:key="source"
+        android:summary="@string/github_source_description" />
+
+    <android.support.v7.preference.PreferenceCategory
+        android:title="@string/support">
+
+        <android.support.v7.preference.Preference
+            android:title="@string/feedback"
+            android:key="feedback"
+            android:summary="@string/feedback_description"/>
+
+        <android.support.v7.preference.Preference
+            android:title="@string/coffee"
+            android:key="coffee"
+            android:summary="@string/coffee_description"/>
+
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory
+        android:title="@string/about">
+
+        <android.support.v7.preference.Preference
+            android:title="@string/version" />
+
+        <android.support.v7.preference.Preference
+            android:title="@string/rate"
+            android:key="rate"
+            android:summary="@string/rate_description" />
+
+        <android.support.v7.preference.Preference
+            android:title="@string/open_source_licenses"
+            android:key="open_source_license" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+</PreferenceScreen>

@@ -18,9 +18,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.marktony.translator.R;
 import com.marktony.translator.constant.Constants;
+import com.marktony.translator.model.BingModel;
 import com.marktony.translator.util.UTF8Encoder;
 
 import org.json.JSONException;
@@ -75,82 +79,50 @@ public class ClipboardService extends Service {
 
     private void handleClipData(final String clipData) {
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                Constants.YOUDAO_URL + "&key=" + Constants.YOUDAO_KEY + "&type=data&doctype=json&version=1.1&q=" + UTF8Encoder.encode(clipData),
-                new Response.Listener<JSONObject>() {
+        StringRequest request = new StringRequest(Request.Method.GET,
+                Constants.BING_BASE + "?Word=" + clipData + "&Samples=false",
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject jsonObject) {
+                    public void onResponse(String s) {
 
                         try {
-                            switch (jsonObject.getInt("errorCode")){
+                            Gson gson = new Gson();
+                            BingModel model = gson.fromJson(s, BingModel.class);
+                            if (model != null) {
+                                String result = model.getWord() + "\n";
+                                if (model.getPronunciation() != null) {
+                                    BingModel.Pronunciation p = model.getPronunciation();
+                                    result = result + "\nAmE:" + p.getAmE() + "\nBrE:" + p.getBrE() + "\n";
+                                }
 
+                                for (BingModel.Definition def : model.getDefs()) {
+                                    result = result + def.getPos() + "\n" + def.getDef() + "\n";
+                                }
 
-                                case 0:
+                                result = result.substring(0, result.length() - 1);
 
-                                    // 需要进行空值判断
-                                    String dic = clipData + "\n";
-                                    if (!jsonObject.isNull("translation")){
-                                        for (int i = 0;i < jsonObject.getJSONArray("translation").length();i++){
-                                            dic = dic + jsonObject.getJSONArray("translation").getString(i);
-                                        }
+                                NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(ClipboardService.this)
+                                        .setSmallIcon(R.drawable.ic_small_icon)
+                                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
+                                        .setContentTitle(getString(R.string.app_name))
+                                        .setContentText(result)
+                                        .setWhen(System.currentTimeMillis())
+                                        .setPriority(Notification.PRIORITY_DEFAULT)
+                                        .setStyle(new NotificationCompat.BigTextStyle().bigText(result));
 
-                                        dic = dic + "\n";
-                                    }
+                                Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
+                                shareIntent.putExtra(Intent.EXTRA_TEXT,result);
 
-                                    if (!jsonObject.isNull("basic")){
+                                PendingIntent sharePi = PendingIntent.getActivity(ClipboardService.this,0,shareIntent,0);
 
-                                        if (!jsonObject.getJSONObject("basic").isNull("phonetic")){
-                                            dic = dic + getString(R.string.pronunciation) + jsonObject.getJSONObject("basic").getString("phonetic") + "\n";
-                                        }
+                                mBuilder.addAction(R.drawable.ic_share_white_24dp,getString(R.string.share),sharePi);
 
-                                        for (int i = 0; i < jsonObject.getJSONObject("basic").getJSONArray("explains").length(); i++){
-                                            dic = dic + jsonObject.getJSONObject("basic").getJSONArray("explains").getString(i) + "; ";
-                                        }
-                                    }
-
-                                    NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(ClipboardService.this)
-                                            .setSmallIcon(R.drawable.ic_small_icon)
-                                            .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
-                                            .setContentTitle(getString(R.string.app_name))
-                                            .setContentText(dic)
-                                            .setWhen(System.currentTimeMillis())
-                                            .setPriority(Notification.PRIORITY_DEFAULT)
-                                            .setStyle(new NotificationCompat.BigTextStyle().bigText(dic));
-
-                                    Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
-                                    shareIntent.putExtra(Intent.EXTRA_TEXT,dic);
-
-                                    PendingIntent sharePi = PendingIntent.getActivity(ClipboardService.this,0,shareIntent,0);
-
-                                    mBuilder.addAction(R.drawable.ic_share_white_24dp,getString(R.string.share),sharePi);
-
-                                    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                                    manager.notify(0,mBuilder.build());
-
-
-                                    break;
-                                case 20:
-                                    Toast.makeText(ClipboardService.this,R.string.error_too_long,Toast.LENGTH_SHORT).show();
-                                    break;
-                                case 30:
-                                    Toast.makeText(ClipboardService.this,R.string.unable_to_get_valid_result,Toast.LENGTH_SHORT).show();
-                                    break;
-                                case 40:
-                                    Toast.makeText(ClipboardService.this,R.string.unsupported_language_type,Toast.LENGTH_SHORT).show();
-                                    break;
-                                case 50:
-                                    Toast.makeText(ClipboardService.this,R.string.invalid_key,Toast.LENGTH_SHORT).show();
-                                    break;
-                                case 60:
-                                    Toast.makeText(ClipboardService.this,R.string.no_dic_result,Toast.LENGTH_SHORT).show();
-                                    break;
-
-                                default:
-                                    break;
+                                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                manager.notify(0,mBuilder.build());
 
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } catch (JsonSyntaxException ex) {
+                            Toast.makeText(ClipboardService.this, R.string.error,Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -159,15 +131,7 @@ public class ClipboardService extends Service {
             public void onErrorResponse(VolleyError volleyError) {
                 Toast.makeText(ClipboardService.this, R.string.network_error,Toast.LENGTH_SHORT).show();
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                HashMap<String,String> headers = new HashMap<String, String>();
-                headers.put("Accept","application/json");
-                headers.put("Content-Type","application/json,charset=UTF-8");
-                return headers;
-            }
-        };
+        });
 
         queue.add(request);
 

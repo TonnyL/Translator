@@ -22,10 +22,4 @@
         android:icon="@drawable/ic_settings_white_24dp"
         android:title="@string/settings" />
 
-    <item
-        android:id="@+id/nav_about"
-        android:checkable="false"
-        android:icon="@drawable/ic_info_white_24dp"
-        android:title="@string/about" />
-
 </menu>

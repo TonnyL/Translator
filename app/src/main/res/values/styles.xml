@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:windowAnimationStyle">@style/activityAnimation</item>
+
+        <item name="preferenceTheme">@style/CustomizedPreferenceScreen</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -19,6 +21,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CustomizedPreferenceScreen" parent="PreferenceThemeOverlay.v14.Material" >
+        <item name="android:fadeScrollbars">true</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarFadeDuration">1</item>
+    </style>
+    
     <style name="activityAnimation" parent="@android:style/Animation">
         <item name="android:activityOpenEnterAnimation">@anim/slide_right_in</item>
         <item name="android:activityOpenExitAnimation">@anim/slide_left_out</item>

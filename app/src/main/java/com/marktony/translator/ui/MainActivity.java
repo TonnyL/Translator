@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity
     private DailyOneFragment dailyOneFragment;
     private TranslateFragment translateFragment;
 
+    private static final String ACTION_NOTEBOOK = "com.marktony.translator.notebook";
+    private static final String ACTION_DAILY_ONE = "com.marktony.translator.dailyone";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +62,14 @@ public class MainActivity extends AppCompatActivity
                 .add(R.id.container_main, noteBookFragment, "noteBookFragment")
                 .commit();
 
-        showHideFragment(0);
-        navigationView.setCheckedItem(R.id.nav_translate);
+        Intent intent = getIntent();
+        if (intent.getAction().equals(ACTION_NOTEBOOK)) {
+            showHideFragment(2);
+        } else if (intent.getAction().equals(ACTION_DAILY_ONE)){
+            showHideFragment(1);
+        } else {
+            showHideFragment(0);
+        }
 
     }
 
@@ -131,11 +140,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_setting) {
 
-            startActivity(new Intent(MainActivity.this,SettingsActivity.class));
-
-        } else if (id == R.id.nav_about) {
-
-            startActivity(new Intent(MainActivity.this,AboutActivity.class));
+            startActivity(new Intent(MainActivity.this,SettingsPreferenceActivity.class));
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -179,12 +184,15 @@ public class MainActivity extends AppCompatActivity
         if (position == 0) {
             manager.beginTransaction().show(translateFragment).commit();
             toolbar.setTitle(R.string.app_name);
+            navigationView.setCheckedItem(R.id.nav_translate);
         } else if (position == 1) {
             toolbar.setTitle(R.string.daily_one);
             manager.beginTransaction().show(dailyOneFragment).commit();
+            navigationView.setCheckedItem(R.id.nav_daily);
         } else if (position == 2) {
             toolbar.setTitle(R.string.notebook);
             manager.beginTransaction().show(noteBookFragment).commit();
+            navigationView.setCheckedItem(R.id.nav_notebook);
         }
 
     }

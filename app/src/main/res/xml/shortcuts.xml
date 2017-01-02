@@ -1,4 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
 
-</PreferenceScreen>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_book_round"
+        android:shortcutId="notebook"
+        android:shortcutShortLabel="@string/check_notebook"
+        android:shortcutLongLabel="@string/check_notebook">
+
+        <intent
+            android:action="com.marktony.translator.notebook"
+            android:targetPackage="com.marktony.translator"
+            android:targetClass="com.marktony.translator.ui.MainActivity" />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_calendar_round"
+        android:shortcutId="dailyone"
+        android:shortcutShortLabel="@string/daily_one"
+        android:shortcutLongLabel="@string/daily_one">
+
+        <intent
+            android:action="com.marktony.translator.dailyone"
+            android:targetPackage="com.marktony.translator"
+            android:targetClass="com.marktony.translator.ui.MainActivity" />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_search_round"
+        android:shortcutId="search"
+        android:shortcutShortLabel="@string/search_notebook"
+        android:shortcutLongLabel="@string/search_notebook">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.marktony.translator"
+            android:targetClass="com.marktony.translator.ui.SearchActivity" />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+
+</shortcuts>

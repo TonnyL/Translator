@@ -1,9 +1,7 @@
 package com.marktony.translator.ui;
 
-import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,7 +26,6 @@ import com.marktony.translator.db.DBUtil;
 import com.marktony.translator.db.NotebookDatabaseHelper;
 import com.marktony.translator.interfaze.OnRecyclerViewOnClickListener;
 import com.marktony.translator.model.NotebookMarkItem;
-import com.marktony.translator.util.SnackBarHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +35,7 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TextView textView;
     private ProgressBar progressBar;
+    private SearchView searchView;
 
     private NotebookMarkItemAdapter adapter;
 
@@ -62,108 +59,136 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
         textView = (TextView) findViewById(R.id.text_view);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        searchView = (SearchView) findViewById(R.id.searchView);
+        searchView.setIconified(false);
 
-        handleIntent(getIntent());
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
 
-    }
+                progressBar.setVisibility(View.VISIBLE);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search,menu);
+                if (list != null) {
+                    list.clear();
+                }
 
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(new ComponentName(getApplicationContext(),SearchActivity.class)));
+                Cursor cursor = db.query("notebook",null,null,null,null,null,null);
+                if (cursor.moveToFirst()){
+                    do {
+                        String in = cursor.getString(cursor.getColumnIndex("input"));
+                        String out = cursor.getString(cursor.getColumnIndex("output"));
 
-        return super.onCreateOptionsMenu(menu);
+                        if (in.contains(query) || out.contains(query)){
+                            NotebookMarkItem item1 = new NotebookMarkItem(in,out);
+                            list.add(item1);
+                        }
+
+                    } while (cursor.moveToNext());
+                }
+
+                cursor.close();
+
+                if (list.isEmpty()){
+                    textView.setVisibility(View.VISIBLE);
+                } else {
+                    textView.setVisibility(View.GONE);
+                    handleResults();
+                }
+
+                progressBar.setVisibility(View.GONE);
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
     }
 
     private void handleResults() {
 
         Collections.reverse(list);
-        adapter = new NotebookMarkItemAdapter(SearchActivity.this,list);
-        recyclerView.setAdapter(adapter);
-        adapter.setItemClickListener(new OnRecyclerViewOnClickListener() {
+        if (adapter == null) {
+            adapter = new NotebookMarkItemAdapter(SearchActivity.this,list);
+            recyclerView.setAdapter(adapter);
+            adapter.setItemClickListener(new OnRecyclerViewOnClickListener() {
 
-            @Override
-            public void OnItemClick(View view, int position) {
+                @Override
+                public void OnItemClick(View view, int position) {
 
-            }
-
-            @Override
-            public void OnSubViewClick(View view, final int position) {
-
-                switch (view.getId()){
-
-                    case R.id.image_view_share:
-
-                        NotebookMarkItem item1 = list.get(position);
-
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_SEND).setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_TEXT,String.valueOf(item1.getInput() + "\n" + item1.getOutput()));
-                        startActivity(Intent.createChooser(intent,getString(R.string.choose_app_to_share)));
-
-                        break;
-
-                    case R.id.image_view_copy:
-
-                        NotebookMarkItem item2 = list.get(position);
-
-                        ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clipData = ClipData.newPlainText("text", String.valueOf(item2.getInput() + "\n" + item2.getOutput()));
-                        manager.setPrimaryClip(clipData);
-
-                        SnackBarHelper helper = new SnackBarHelper(SearchActivity.this);
-                        helper.make(recyclerView,getString(R.string.copy_done), Snackbar.LENGTH_SHORT);
-                        helper.show();
-
-                        break;
-
-                    case R.id.image_view_mark_star:
-
-                        final NotebookMarkItem item3 = list.get(position);
-
-                        DBUtil.deleteValue(dbHelper,item3.getInput());
-
-                        list.remove(position);
-
-                        adapter.notifyItemRemoved(position);
-                        adapter.notifyItemRangeChanged(position,list.size());
-
-                        SnackBarHelper h = new SnackBarHelper(SearchActivity.this);
-                        h.make(recyclerView,getString(R.string.add_to_notebook),Snackbar.LENGTH_LONG);
-                        h.setAction(getString(R.string.undo), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                ContentValues values = new ContentValues();
-                                values.put("input",item3.getInput());
-                                values.put("output",item3.getOutput());
-
-                                DBUtil.insertValue(dbHelper,values);
-
-                                values.clear();
-
-                                list.add(position,item3);
-                                adapter.notifyItemInserted(position);
-                                recyclerView.smoothScrollToPosition(position);
-
-                            }
-                        });
-                        h.show();
-
-                        break;
-
-                    default:
-                        break;
                 }
-            }
-        });
+
+                @Override
+                public void OnSubViewClick(View view, final int position) {
+
+                    switch (view.getId()){
+
+                        case R.id.image_view_share:
+
+                            NotebookMarkItem item1 = list.get(position);
+
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_SEND).setType("text/plain");
+                            intent.putExtra(Intent.EXTRA_TEXT,String.valueOf(item1.getInput() + "\n" + item1.getOutput()));
+                            startActivity(Intent.createChooser(intent,getString(R.string.choose_app_to_share)));
+
+                            break;
+
+                        case R.id.image_view_copy:
+
+                            NotebookMarkItem item2 = list.get(position);
+
+                            ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clipData = ClipData.newPlainText("text", String.valueOf(item2.getInput() + "\n" + item2.getOutput()));
+                            manager.setPrimaryClip(clipData);
+
+                            Snackbar.make(recyclerView, R.string.copy_done, Snackbar.LENGTH_SHORT).show();
+
+                            break;
+
+                        case R.id.image_view_mark_star:
+
+                            final NotebookMarkItem item3 = list.get(position);
+
+                            DBUtil.deleteValue(dbHelper,item3.getInput());
+
+                            list.remove(position);
+
+                            adapter.notifyItemRemoved(position);
+                            adapter.notifyItemRangeChanged(position,list.size());
+
+                            Snackbar.make(recyclerView, R.string.add_to_notebook, Snackbar.LENGTH_LONG)
+                                    .setAction(R.string.undo, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            ContentValues values = new ContentValues();
+                                            values.put("input",item3.getInput());
+                                            values.put("output",item3.getOutput());
+
+                                            DBUtil.insertValue(dbHelper,values);
+
+                                            values.clear();
+
+                                            list.add(position,item3);
+                                            adapter.notifyItemInserted(position);
+                                            recyclerView.smoothScrollToPosition(position);
+
+                                        }
+                                    }).show();
+
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            });
+        } else {
+            adapter.notifyDataSetChanged();
+        }
 
     }
 
@@ -192,42 +217,4 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    private void handleIntent(Intent intent) {
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-
-            progressBar.setVisibility(View.VISIBLE);
-
-            Cursor cursor = db.query("notebook",null,null,null,null,null,null);
-            if (cursor.moveToFirst()){
-                do {
-                    String in = cursor.getString(cursor.getColumnIndex("input"));
-                    String out = cursor.getString(cursor.getColumnIndex("output"));
-
-                    if (in.contains(query) || out.contains(query)){
-                        NotebookMarkItem item1 = new NotebookMarkItem(in,out);
-                        list.add(item1);
-                    }
-
-                } while (cursor.moveToNext());
-            }
-
-            cursor.close();
-
-            if (list.isEmpty()){
-                textView.setVisibility(View.VISIBLE);
-            } else {
-                textView.setVisibility(View.GONE);
-                handleResults();
-            }
-
-            progressBar.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
-    }
 }

@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,7 +27,6 @@ import com.marktony.translator.db.DBUtil;
 import com.marktony.translator.db.NotebookDatabaseHelper;
 import com.marktony.translator.interfaze.OnRecyclerViewOnClickListener;
 import com.marktony.translator.model.NotebookMarkItem;
-import com.marktony.translator.util.SnackBarHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,9 +86,7 @@ public class NoteBookFragment extends Fragment {
 
                         if (in.isEmpty() || out.isEmpty()){
 
-                            SnackBarHelper helper = new SnackBarHelper(getActivity());
-                            helper.make(fab,R.string.no_input,Snackbar.LENGTH_SHORT);
-                            helper.show();
+                            Snackbar.make(fab, R.string.no_input, Snackbar.LENGTH_SHORT).show();
 
                         } else {
 
@@ -128,20 +124,7 @@ public class NoteBookFragment extends Fragment {
             }
         });
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query("notebook",null,null,null,null,null,null);
-        if (cursor.moveToFirst()){
-            do {
-                String in = cursor.getString(cursor.getColumnIndex("input"));
-                String out = cursor.getString(cursor.getColumnIndex("output"));
-
-                NotebookMarkItem item = new NotebookMarkItem(in,out);
-                list.add(item);
-
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
+        getDataFromDB();
 
         if (list.isEmpty()){
             tvNoNote.setVisibility(View.VISIBLE);
@@ -181,9 +164,7 @@ public class NoteBookFragment extends Fragment {
                         ClipData clipData = ClipData.newPlainText("text", String.valueOf(item2.getInput() + "\n" + item2.getOutput()));
                         manager.setPrimaryClip(clipData);
 
-                        SnackBarHelper helper = new SnackBarHelper(getActivity());
-                        helper.make(fab,getString(R.string.copy_done),Snackbar.LENGTH_SHORT);
-                        helper.show();
+                        Snackbar.make(fab, R.string.copy_done, Snackbar.LENGTH_SHORT).show();
 
                         break;
 
@@ -198,27 +179,23 @@ public class NoteBookFragment extends Fragment {
                         adapter.notifyItemRemoved(position);
                         adapter.notifyItemRangeChanged(position,list.size());
 
-                        SnackBarHelper h = new SnackBarHelper(getActivity());
-                        h.make(fab,getString(R.string.add_to_notebook),Snackbar.LENGTH_LONG);
-                        h.setAction(getString(R.string.undo), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+                        Snackbar.make(fab, R.string.remove_from_notebook, Snackbar.LENGTH_SHORT)
+                                .setAction(R.string.undo, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ContentValues values = new ContentValues();
+                                        values.put("input",item3.getInput());
+                                        values.put("output",item3.getOutput());
 
-                                ContentValues values = new ContentValues();
-                                values.put("input",item3.getInput());
-                                values.put("output",item3.getOutput());
+                                        DBUtil.insertValue(dbHelper,values);
 
-                                DBUtil.insertValue(dbHelper,values);
+                                        values.clear();
 
-                                values.clear();
-
-                                list.add(position,item3);
-                                adapter.notifyItemInserted(position);
-                                recyclerViewNotebook.smoothScrollToPosition(position);
-
-                            }
-                        });
-                        h.show();
+                                        list.add(position,item3);
+                                        adapter.notifyItemInserted(position);
+                                        recyclerViewNotebook.smoothScrollToPosition(position);
+                                    }
+                                }).show();
 
                         break;
 
@@ -240,6 +217,41 @@ public class NoteBookFragment extends Fragment {
 
         tvNoNote = (TextView) view.findViewById(R.id.tv_no_note);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDataFromDB();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        getDataFromDB();
+    }
+
+    private void getDataFromDB() {
+        if (list != null) {
+            list.clear();
+        }
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query("notebook",null,null,null,null,null,null);
+        if (cursor.moveToFirst()){
+            do {
+                String in = cursor.getString(cursor.getColumnIndex("input"));
+                String out = cursor.getString(cursor.getColumnIndex("output"));
+
+                NotebookMarkItem item = new NotebookMarkItem(in,out);
+                list.add(item);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
     }
 
 }

@@ -26,7 +26,6 @@ import com.marktony.translator.R;
 import com.marktony.translator.constant.Constants;
 import com.marktony.translator.db.DBUtil;
 import com.marktony.translator.db.NotebookDatabaseHelper;
-import com.marktony.translator.util.SnackBarHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,12 +77,11 @@ public class DailyOneFragment extends Fragment {
         ivStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SnackBarHelper helper = new SnackBarHelper(getActivity());
 
                 // 在没有被收藏的情况下
                 if (!isMarked){
                     ivStar.setImageResource(R.drawable.ic_grade_white_24dp);
-                    helper.make(ivStar,R.string.add_to_notebook, Snackbar.LENGTH_SHORT);
+                    Snackbar.make(ivStar, R.string.add_to_notebook, Snackbar.LENGTH_SHORT).show();
                     isMarked = true;
 
                     ContentValues values = new ContentValues();
@@ -95,14 +93,12 @@ public class DailyOneFragment extends Fragment {
 
                 } else {
                     ivStar.setImageResource(R.drawable.ic_star_border_white_24dp);
-                    helper.make(ivStar,getString(R.string.remove_from_notebook),Snackbar.LENGTH_SHORT);
+                    Snackbar.make(ivStar, R.string.remove_from_notebook, Snackbar.LENGTH_SHORT).show();
                     isMarked = false;
 
                     DBUtil.deleteValue(dbHelper,textViewEng.getText().toString());
 
                 }
-
-                helper.show();
             }
         });
 
@@ -113,9 +109,7 @@ public class DailyOneFragment extends Fragment {
                 ClipData clipData = ClipData.newPlainText("text", String.valueOf(textViewEng.getText() + "\n" + textViewChi.getText()));
                 manager.setPrimaryClip(clipData);
 
-                SnackBarHelper helper = new SnackBarHelper(getActivity());
-                helper.make(ivCopy,R.string.copy_done,Snackbar.LENGTH_SHORT);
-                helper.show();
+                Snackbar.make(ivCopy, R.string.copy_done, Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -194,6 +188,8 @@ public class DailyOneFragment extends Fragment {
             Glide.with(getActivity())
                     .load(imageUrl)
                     .asBitmap()
+                    .placeholder(R.drawable.nav_header)
+                    .error(R.drawable.nav_header)
                     .into(imageViewMain);
         }
 

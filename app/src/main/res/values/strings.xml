@@ -1,77 +1,74 @@
 <resources>
 
     <string name="app_name">简单翻译</string>
-    <string name="input_hint">点击输入文字</string>
-    <string name="no_network_connection">当前没有网络连接</string>
-    <string name="no_input">输入为空</string>
-    <string name="setting">设置</string>
-    <string name="title_activity_about">关于</string>
-    <string name="version">version:1.3.2</string>
-    <string name="got_it">知道了</string>
-    <string name="topic">简单翻译使用反馈</string>
-    <string name="sdk_version">SDK版本:</string>
-    <string name="choose_mail">选择邮件类应用</string>
-    <string name="sendto">mailto:marktonymengyi@gmail.com</string>
-
-    <string name="donate">捐赠开发者</string>
-    <string name="donate_content">支付宝账号将会复制到粘贴板，进入支付宝可直接粘贴完成捐赠，感谢您的支持！</string>
-    <string name="donate_title">感谢您的捐赠</string>
-    <string name="donate_account">marktonymengyi@gmail.com</string>
-    <string name="OK">确定</string>
-    <string name="cancel">取消</string>
-
-    <string name="error_too_long">要翻译的文本过长</string>
-    <string name="unable_to_get_valid_result">无法进行有效的翻译</string>
-    <string name="unsupported_language_type">不支持的语言类型</string>
-    <string name="invalid_key">无效的key</string>
-    <string name="no_dic_result">无词典结果</string>
-
-    <string name="no_mail_app">没有安装邮件类应用</string>
-
-    <string name="share_results">分享翻译结果</string>
-    <string name="no_result_to_share">没有可以分享的结果</string>
-    <string name="choose_app_to_share">请选择要分享的应用</string>
-    <string name="no_app_store">没有找到市场类的App</string>
-    <string name="clear">清除已输入内容</string>
-
-    <string name="rate">为简单翻译App评分</string>
-    <string name="rate_description">如果你喜欢简单翻译App,那么在商店中为她评分吧</string>
-    <string name="author">作者</string>
-    <string name="author_name">黎赵太郎</string>
-    <string name="author_description">湖南，长沙</string>
-    <string name="follow_on_github">在GitHub关注我</string>
-    <string name="github_url">https://github.com/marktony</string>
-    <string name="support">支持</string>
-    <string name="feedback_advice">反馈BUG / 建议</string>
-    <string name="feedback_advice_description">帮助我改进简单翻译App</string>
-    <string name="coffee">请我喝杯咖啡</string>
-    <string name="coffee_description">如果你认同我的工作，可以请我喝杯咖啡表示支持</string>
-    <string name="open_source_licenses">开源许可</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_search">搜索笔记</string>
-    <string name="translate">翻译</string>
     <string name="daily_one">每日一句</string>
     <string name="notebook">笔记本</string>
     <string name="settings">设置</string>
-    <string name="about">关于</string>
-    <string name="add_to_notebook">添加到笔记本</string>
+
+    <string name="search_notebook">搜索笔记</string>
+    <string name="check_notebook">查看笔记本</string>
+
+    <string name="OK">确定</string>
+    <string name="cancel">@android:string/cancel</string>
+    <string name="got_it">知道了</string>
+
+    <string name="input_hint">点击输入文字</string>
+    <string name="no_network_connection">当前没有网络连接</string>
+    <string name="no_input">输入为空</string>
+
+    <string name="translate">翻译</string>
+    <string name="clear">清除已输入内容</string>
+    <string name="retry">重试</string>
+    <string name="trans_error">网络错误</string>
+    <string name="error">发生了一些错误</string>
+
+    <string name="add_to_notebook">添加成功</string>
+    <string name="remove_from_notebook">删除成功</string>
     <string name="undo">撤销</string>
     <string name="copy_done">复制成功</string>
-    <string name="remove_from_notebook">从笔记本中删除</string>
-    <string name="original_text">原文</string>
-    <string name="translated_text">译文</string>
     <string name="copy">复制</string>
     <string name="share">分享</string>
+    <string name="no_result_to_share">没有可以分享的结果</string>
+    <string name="choose_app_to_share">请选择要分享的应用</string>
+
+    <string name="action_search">搜索笔记</string>
     <string name="no_related_note">没有找到相关的笔记</string>
+
     <string name="daily_sen_text_1">Hello,world</string>
     <string name="daily_sen_text_2">你好，世界</string>
+    <string name="no_note">没有笔记</string>
+    <string name="network_error">网络出问题啦</string>
+
+    <string name="basic_settings">基本设置</string>
     <string name="start_tap_translate">启用点按翻译功能</string>
     <string name="start_tap_translate_script">只需要复制文字即可获取即时翻译</string>
-    <string name="no_note">没有笔记</string>
-    <string name="pronunciation">发音:</string>
-    <string name="network_error">网络出问题啦</string>
+    <string name="github_source">GitHub 源码</string>
+    <string name="github_source_description">https://github.com/marktony/Translator</string>
+    <string name="enter_key">按回车键结束输入</string>
+    <string name="show_samples">显示例句</string>
+    <string name="topic">简单翻译使用反馈</string>
+    <string name="sdk_version">SDK版本:</string>
+    <string name="choose_mail">选择邮件类应用</string>
+    <string name="sendto">mailto:marktonymengyi@gmail.com</string>
+    <string name="donate">捐赠开发者</string>
+    <string name="donate_content">支付宝账号将会复制到粘贴板，进入支付宝可直接粘贴完成捐赠，感谢您的支持！</string>
+    <string name="donate_title">感谢您的捐赠</string>
+    <string name="donate_account">marktonymengyi@gmail.com</string>
+    <string name="no_mail_app">没有安装邮件类应用</string>
+    <string name="no_app_store">没有找到市场类的App</string>
+    <string name="rate">为简单翻译App评分</string>
+    <string name="about">关于</string>
+    <string name="version">version:1.3.3</string>
+    <string name="rate_description">如果你喜欢简单翻译App,那么在商店中为她评分吧</string>
+    <string name="support">支持</string>
+    <string name="feedback">反馈BUG / 建议</string>
+    <string name="feedback_description">帮助我改进简单翻译App</string>
+    <string name="coffee">请我喝杯咖啡</string>
+    <string name="coffee_description">如果你认同我的工作，可以请我喝杯咖啡表示支持</string>
+    <string name="open_source_licenses">开源许可</string>
 
 </resources>
